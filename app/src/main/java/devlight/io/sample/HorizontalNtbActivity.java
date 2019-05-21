@@ -63,28 +63,28 @@ public class HorizontalNtbActivity extends Activity {
         final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
         models.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_eighth),
+                        getResources().getDrawable(R.drawable.ic_list),
                         Color.parseColor(colors[3]))
 //                        .selectedIcon(getResources().getDrawable(R.drawable.ic_eighth))
-                        .title("Home")
+                        .title("List")
                         .badgeTitle("state")
                         .build()
         );
 
         models.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_first),
+                        getResources().getDrawable(R.drawable.ic_calendar),
                         Color.parseColor(colors[1]))
 //                        .selectedIcon(getResources().getDrawable(R.drawable.ic_eighth))
-                        .title("Add")
+                        .title("Calendar")
                        // .badgeTitle("with")
                         .build()
         );
         models.add(
                 new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.drawable.ic_third),
+                        getResources().getDrawable(R.drawable.ic_lemon),
                         Color.parseColor(colors[2]))
-                        .title("Me")
+                        .title("Lemon Tree")
                       //  .badgeTitle("with")
                         .build()
         );
