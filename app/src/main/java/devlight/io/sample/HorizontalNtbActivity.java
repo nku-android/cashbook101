@@ -6,8 +6,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +28,9 @@ import java.util.List;
  * Created by GIGAMOLE on 28.03.2016.
  */
 
-public class HorizontalNtbActivity extends Activity {
+public class HorizontalNtbActivity extends FragmentActivity {
+
+    FragmentManager fm = getSupportFragmentManager();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -32,49 +38,51 @@ public class HorizontalNtbActivity extends Activity {
         setContentView(R.layout.activity_horizontal_ntb);
         initUI();
 
-
     }
 
     private void initUI()  {
         // 找到 viewpager
         final ViewPager viewPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
+        List<Fragment> view_container = new ArrayList<Fragment>();
+        PageTodolist pageTodolist = new PageTodolist();
+        view_container.add(pageTodolist);
 
-        // 找到三个页面，放入容器中
-        final View page1_todolist = LayoutInflater.from(
-                getBaseContext()).inflate(R.layout.page1_todolist, null, false);
-        final View page2_calender = LayoutInflater.from(
-                getBaseContext()).inflate(R.layout.page2_calender,null,false);
-        final View page3_lemon = LayoutInflater.from(
-                getBaseContext()).inflate(R.layout.page3_lemon,null,false);
+        PageLemon pageLemon = new PageLemon();
+        PageCalender pageCalender = new PageCalender();
 
-        List<View> view_container = new ArrayList<View>();
+        view_container.add(pageCalender);
+        view_container.add(pageLemon);
+//        // 找到三个页面，放入容器中
+//        final View page1_todolist = LayoutInflater.from(
+//                getBaseContext()).inflate(R.layout.page1_todolist, null, false);
+//        Intent intent = new Intent(this, PageTodolist.class);
+//
+//
+//        final View page2_calender = LayoutInflater.from(
+//                getBaseContext()).inflate(R.layout.page2_calender,null,false);
+//        final View page3_lemon = LayoutInflater.from(
+//                getBaseContext()).inflate(R.layout.page3_lemon,null,false);
 
-        view_container.add(page1_todolist);
-        view_container.add(page2_calender);
-        view_container.add(page3_lemon);
 
 
-        viewPager.setAdapter(new PagerAdapter() {
+        viewPager.setAdapter(new FragmentPagerAdapter(fm) {
             @Override
             public int getCount() {
                 return 3;
             }
 
             @Override
-            public boolean isViewFromObject(final View view, final Object object) {
-                return view.equals(object);
-            }
-
-            @Override
-            public void destroyItem(final View container, final int position, final Object object) {
-                ((ViewPager) container).removeView((View) object);
-            }
-
-            @Override
-            public Object instantiateItem(final ViewGroup container, final int position) {
-                container.addView(view_container.get(position));
+            public Fragment getItem(int position){
+                String a = "这是页面" +position;
+                Log.i("getItem!",a);
                 return view_container.get(position);
             }
+
+//            @Override
+//            public Object instantiateItem(final ViewGroup container, final int position) {
+//                container.addView(view_container.get(position));
+//                return view_container.get(position);
+//            }
         });
 
         final String[] colors = getResources().getStringArray(R.array.default_preview);
@@ -122,7 +130,7 @@ public class HorizontalNtbActivity extends Activity {
             @Override
             public void onPageSelected(final int position) {
                 navigationTabBar.getModels().get(position).hideBadge();
-              
+
             }
 
             @Override
