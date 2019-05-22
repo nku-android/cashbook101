@@ -51,6 +51,11 @@ public class HorizontalNtbActivity extends Activity {
 
                 final TextView txtPage = (TextView) view.findViewById(R.id.txt_vp_item_page);
                 txtPage.setText(String.format("Page #%d", position));
+                if (position==0)
+                {
+                    setContentView(R.layout.activity_samples_ntb);
+                }
+
 
                 container.addView(view);
                 return view;
