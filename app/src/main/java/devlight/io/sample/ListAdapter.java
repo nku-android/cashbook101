@@ -10,14 +10,17 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
 
 import java.util.List;
 
+import static devlight.io.sample.R.drawable.ic_button_on;
 
-public class ListAdapter extends ArrayAdapter<String> {
+
+public class ListAdapter extends ArrayAdapter<String>{
 
     private int resourceId;
     private ListView listView;
@@ -63,21 +66,23 @@ public class ListAdapter extends ArrayAdapter<String> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         String data = getItem(position);
-        TextView text;
+        final ViewHolder viewHolder;
         if (convertView == null) {
             //若没有缓存布局，则加载
             //首先获取布局填充器，然后使用布局填充器填充布局文件
             convertView=LayoutInflater.from(getContext()).inflate(resourceId,null);
 
             //存储子项布局中子控件对象
-            text = (TextView) convertView.findViewById(R.id.list_item);
+            viewHolder = new ViewHolder();
+            viewHolder.text = (TextView) convertView.findViewById(R.id.list_item_text);
+            viewHolder.btn = (ImageButton) convertView.findViewById(R.id.list_item_btn);
 
             // 将内部类对象存储到View对象中
-            convertView.setTag(text);
+            convertView.setTag(viewHolder);
 
         } else {
             //若有缓存布局，则直接用缓存（利用的是缓存的布局，利用的不是缓存布局中的数据）
-            text = (TextView) convertView.getTag();
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
         //清除当前显示区域中所有item的动画
@@ -90,15 +95,26 @@ public class ListAdapter extends ArrayAdapter<String> {
             convertView.startAnimation(animation);
         }
 
-        text.setText(data);
+        viewHolder.btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewHolder.btn.setImageResource(R.drawable.ic_button_on);
+                Log.e("点击xuanzhongshijian","position"+position);
+            }
+        });
+        viewHolder.text.setText(data);
+        viewHolder.btn.setTag(position);
+        convertView.setTag(viewHolder);
+
 
         return convertView;
     }
 
-
-    public void bindView(ListView listView){
-
+    public final static class ViewHolder {
+        ImageButton btn;
+        TextView text;
     }
+
 
 
 }

@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_round_rect">
+
+    <ImageButton
+        android:id="@+id/list_item_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:background="@drawable/select_button_first"
+        android:layout_gravity="center"
+        android:layout_marginLeft="15dp"/>
 
     <TextView
-        android:id="@+id/list_item"
+        android:id="@+id/list_item_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp"
@@ -16,8 +27,6 @@
         android:layout_marginBottom="5dp"
         android:background="@drawable/bg_round_rect"
         android:drawablePadding="20dp"
-        android:drawableLeft="@drawable/ic_button_off"
-        android:gravity="center_vertical"
         android:text="Todolist1"
         android:textSize="9pt"
         android:textColor="#9b92b3" />

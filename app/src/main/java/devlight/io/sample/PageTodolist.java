@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,25 +35,10 @@ public class PageTodolist extends Fragment {
         todoList = (ListView) view.findViewById(R.id.todolist);
         ListAdapter listAdapter = new ListAdapter(getActivity(),R.layout.item_todolist,list,todoList);
         todoList.setAdapter(listAdapter);
+
         return view;
     }
 
-
-//    @Override
-//    protected void onCreate(final Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_horizontal_ntb);
-//
-//        for(int i=0;i<50;i++){
-//            list.add("todolist"+i);
-//        }
-//
-//        ListAdapter listAdapter = new ListAdapter(PageTodolist.this,R.layout.item_list,list);
-//        todoList = (ListView) findViewById(R.id.todolist);
-//        todoList.setAdapter(listAdapter);
-//
-//
-//    }
 
 }
 
