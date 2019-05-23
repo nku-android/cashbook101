@@ -20,13 +20,14 @@ import java.util.List;
 import static devlight.io.sample.R.drawable.ic_button_on;
 
 
-public class ListAdapter extends ArrayAdapter<String>{
+public class ListAdapter extends ArrayAdapter<String> implements View.OnClickListener {
 
     private int resourceId;
     private ListView listView;
     private Animation animation;
     private boolean isScrollDown;
     private int mFirstTop, mFirstPosition;
+    private InnerItemOnclickListener mListener;
 
     @SuppressLint("ResourceType")
     public ListAdapter(Context context, int textViewResourceId, List<String> objects, ListView mlistView){
@@ -95,20 +96,27 @@ public class ListAdapter extends ArrayAdapter<String>{
             convertView.startAnimation(animation);
         }
 
-        viewHolder.btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewHolder.btn.setImageResource(R.drawable.ic_button_on);
-                Log.e("点击xuanzhongshijian","position"+position);
-            }
-        });
+        viewHolder.btn.setOnClickListener(this);
         viewHolder.text.setText(data);
         viewHolder.btn.setTag(position);
-        convertView.setTag(viewHolder);
 
 
         return convertView;
     }
+
+    interface InnerItemOnclickListener {
+        void itemClick(View v);
+    }
+
+    public void setOnInnerItemOnClickListener(InnerItemOnclickListener listener){
+        this.mListener=listener;
+    }
+
+    @Override
+    public void onClick(View v) {
+        mListener.itemClick(v);
+    }
+
 
     public final static class ViewHolder {
         ImageButton btn;
