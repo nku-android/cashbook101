@@ -14,14 +14,13 @@ import org.w3c.dom.Text;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class ListAdapter extends BaseAdapter {
+public class ListAdapter extends ArrayAdapter<String> {
 
-    private List<String> data;
-    private Context context;
+    private int resourceId;
 
-    public ListAdapter(Context context,List<String> data){
-        this.context=context;
-        this.data=data;
+    public ListAdapter(Context context, int textViewResourceId, List<String> objects){
+        super(context, textViewResourceId, objects);
+        resourceId = textViewResourceId;
     }
 
     /*  由系统调用，获取一个View对象，作为ListView的条目，屏幕上能显示多少个条目，getView方法就会被调用多少次
@@ -30,11 +29,12 @@ public class ListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+        Object data = getItem(position);
         TextView text;
         if (convertView == null) {
             //若没有缓存布局，则加载
             //首先获取布局填充器，然后使用布局填充器填充布局文件
-            convertView=LayoutInflater.from(context).inflate(R.layout.main_todolist,parent,false);
+            convertView=LayoutInflater.from(getContext()).inflate(resourceId,null);
 
             //存储子项布局中子控件对象
             text = (TextView) convertView.findViewById(R.id.list_item);
@@ -44,28 +44,11 @@ public class ListAdapter extends BaseAdapter {
 
         } else {
             //若有缓存布局，则直接用缓存（利用的是缓存的布局，利用的不是缓存布局中的数据）
-            convertView = (TextView) convertView.getTag();
-            text = (TextView) convertView.findViewById(R.id.list_item);
+            text = (TextView) convertView.getTag();
         }
 
-        Log.i("当前是data",data.get(position));
-        text.setText(data.get(position));
+        text.setText((String) data);
         return convertView;
-    }
-
-    @Override
-    public int getCount() {
-        return data.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return null;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
     }
 
 

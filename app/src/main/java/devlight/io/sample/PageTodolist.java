@@ -31,7 +31,7 @@ public class PageTodolist extends Fragment {
             list.add("todolist"+i);
         }
 
-        ListAdapter listAdapter = new ListAdapter(getActivity(),list);
+        ListAdapter listAdapter = new ListAdapter(getActivity(),R.layout.item_todolist,list);
         todoList = (ListView) view.findViewById(R.id.todolist);
         todoList.setAdapter(listAdapter);
         return view;
