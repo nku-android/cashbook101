@@ -3,45 +3,44 @@ package devlight.io.sample;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import devlight.io.library.ntb.NavigationTabBar;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import devlight.io.library.ntb.NavigationTabBar;
 
 /**
  * Created by GIGAMOLE on 28.03.2016.
  */
 
 public class HorizontalNtbActivity extends Activity {
+    private final String TAG = this.getClass().getName();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_horizontal_ntb);
         initUI();
-
     }
 
-    private void initUI()  {
+    private void initUI() {
         // 找到 viewpager
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
+        final ViewPager viewPager = findViewById(R.id.vp_horizontal_ntb);
 
         // 找到三个页面，放入容器中
         final View page1_todolist = LayoutInflater.from(
                 getBaseContext()).inflate(R.layout.page1_todolist, null, false);
         final View page2_calender = LayoutInflater.from(
-                getBaseContext()).inflate(R.layout.page2_calender,null,false);
+                getBaseContext()).inflate(R.layout.page2_calender, null, false);
         final View page3_lemon = LayoutInflater.from(
-                getBaseContext()).inflate(R.layout.page3_lemon,null,false);
+                getBaseContext()).inflate(R.layout.page3_lemon, null, false);
 
         List<View> view_container = new ArrayList<View>();
 
@@ -57,17 +56,18 @@ public class HorizontalNtbActivity extends Activity {
             }
 
             @Override
-            public boolean isViewFromObject(final View view, final Object object) {
+            public boolean isViewFromObject(@NonNull final View view, @NonNull final Object object) {
                 return view.equals(object);
             }
 
             @Override
-            public void destroyItem(final View container, final int position, final Object object) {
+            public void destroyItem(@NonNull final View container, final int position, @NonNull final Object object) {
                 ((ViewPager) container).removeView((View) object);
             }
 
+            @NonNull
             @Override
-            public Object instantiateItem(final ViewGroup container, final int position) {
+            public Object instantiateItem(@NonNull final ViewGroup container, final int position) {
                 container.addView(view_container.get(position));
                 return view_container.get(position);
             }
@@ -75,7 +75,7 @@ public class HorizontalNtbActivity extends Activity {
 
         final String[] colors = getResources().getStringArray(R.array.default_preview);
 
-        final NavigationTabBar navigationTabBar = (NavigationTabBar) findViewById(R.id.ntb_horizontal);
+        final NavigationTabBar navigationTabBar = findViewById(R.id.ntb_horizontal);
         final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
         models.add(
                 new NavigationTabBar.Model.Builder(
@@ -106,7 +106,6 @@ public class HorizontalNtbActivity extends Activity {
         );
 
 
-
         navigationTabBar.setModels(models);
         navigationTabBar.setViewPager(viewPager, 0);
         navigationTabBar.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -118,26 +117,24 @@ public class HorizontalNtbActivity extends Activity {
             @Override
             public void onPageSelected(final int position) {
                 navigationTabBar.getModels().get(position).hideBadge();
+
             }
 
             @Override
             public void onPageScrollStateChanged(final int state) {
-
+                Log.i(TAG, String.format("onPageScrollStateChanged: state: %d", state));
             }
         });
 
-        navigationTabBar.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < navigationTabBar.getModels().size(); i++) {
-                    final NavigationTabBar.Model model = navigationTabBar.getModels().get(i);
-                    navigationTabBar.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            //model.showBadge();
-                        }
-                    }, i * 100);
-                }
+        navigationTabBar.postDelayed(() -> {
+            for (int i = 0; i < navigationTabBar.getModels().size(); i++) {
+                final NavigationTabBar.Model model = navigationTabBar.getModels().get(i);
+                navigationTabBar.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //model.showBadge();
+                    }
+                }, i * 100);
             }
         }, 500);
     }

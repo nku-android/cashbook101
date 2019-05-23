@@ -26,7 +26,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':navigationtabbar')
-
+    implementation 'me.nlmartian.silkcal:library:0.1.1'
 //    compile 'com.github.devlight.navigationtabbar:navigationtabbar:1.2.3'
 
 

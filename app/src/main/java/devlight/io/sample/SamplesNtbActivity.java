@@ -9,6 +9,7 @@ import android.widget.Toast;
 import devlight.io.library.ntb.NavigationTabBar;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by GIGAMOLE on 28.03.2016.
@@ -160,7 +161,7 @@ public class SamplesNtbActivity extends Activity {
 
             @Override
             public void onEndTabSelected(final NavigationTabBar.Model model, final int index) {
-                Toast.makeText(SamplesNtbActivity.this, String.format("onEndTabSelected #%d", index), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SamplesNtbActivity.this, String.format(Locale.CHINA, "onEndTabSelected #%d", index), Toast.LENGTH_SHORT).show();
             }
         });
 
