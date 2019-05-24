@@ -23,9 +23,9 @@
 
         <activity android:name=".SamplesNtbActivity"/>
         
-        <activity android:name=".PageTodolist">
-
-        </activity>
+        <activity android:name=".PageTodolist"/>
+        <activity android:name=".PageLemon"/>
+        <activity android:name=".addtask"/>
     </application>
 
 </manifest>
