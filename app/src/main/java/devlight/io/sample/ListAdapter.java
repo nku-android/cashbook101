@@ -2,7 +2,7 @@ package devlight.io.sample;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +17,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import static devlight.io.sample.R.drawable.ic_button_on;
+import de.halfbit.pinnedsection.PinnedSectionListView;
 
 
-public class ListAdapter extends ArrayAdapter<String> implements View.OnClickListener {
+
+public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements View.OnClickListener , PinnedSectionListView.PinnedSectionListAdapter {
 
     private int resourceId;
     private ListView listView;
@@ -28,13 +29,15 @@ public class ListAdapter extends ArrayAdapter<String> implements View.OnClickLis
     private boolean isScrollDown;
     private int mFirstTop, mFirstPosition;
     private InnerItemOnclickListener mListener;
+    private List<itemHolder> mitemList;
 
     @SuppressLint("ResourceType")
-    public ListAdapter(Context context, int textViewResourceId, List<String> objects, ListView mlistView){
+    public ListAdapter(Context context, int textViewResourceId, List<itemHolder> objects, ListView mlistView){
         super(context, textViewResourceId, objects);
         resourceId = textViewResourceId;
         listView = mlistView;
         animation = AnimationUtils.loadAnimation(context,R.animator.item_list_in_anim);
+        mitemList = objects;
 
         AbsListView.OnScrollListener mOnScrollListener = new AbsListView.OnScrollListener() {
             @Override
@@ -66,7 +69,7 @@ public class ListAdapter extends ArrayAdapter<String> implements View.OnClickLis
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        String data = getItem(position);
+        itemHolder data = getItem(position);
         final ViewHolder viewHolder;
         if (convertView == null) {
             //若没有缓存布局，则加载
@@ -76,7 +79,9 @@ public class ListAdapter extends ArrayAdapter<String> implements View.OnClickLis
             //存储子项布局中子控件对象
             viewHolder = new ViewHolder();
             viewHolder.text = (TextView) convertView.findViewById(R.id.list_item_text);
+            viewHolder.time = (TextView) convertView.findViewById(R.id.list_item_time);
             viewHolder.btn = (ImageButton) convertView.findViewById(R.id.list_item_btn);
+
 
             // 将内部类对象存储到View对象中
             convertView.setTag(viewHolder);
@@ -91,14 +96,36 @@ public class ListAdapter extends ArrayAdapter<String> implements View.OnClickLis
             View view = listView.getChildAt(i);
             view.clearAnimation();
         }
+
         //然后给当前item添加上动画
         if (isScrollDown) {
             convertView.startAnimation(animation);
         }
 
-        viewHolder.btn.setOnClickListener(this);
-        viewHolder.text.setText(data);
-        viewHolder.btn.setTag(position);
+
+        viewHolder.text.setText(data.text);
+
+        if (data.type == 0) {
+            viewHolder.btn = null;
+            convertView.setBackgroundColor(Color.parseColor("#BEBEBE"));
+            viewHolder.text.setBackgroundColor(Color.parseColor("#BEBEBE"));
+            viewHolder.time.setBackgroundColor(Color.parseColor("#BEBEBE"));
+            viewHolder.text.setTextColor(Color.parseColor("#708090"));
+        }
+        if (data.type == 1) {
+            viewHolder.btn.setImageResource(R.drawable.select_button_on);
+            viewHolder.btn.setTag(position);
+            viewHolder.btn.setOnClickListener(this);
+            viewHolder.time.setText(data.time);
+        }
+        if (data.type == 2) {
+            viewHolder.btn.setImageResource(R.drawable.select_button_off);
+            viewHolder.btn.setTag(position);
+            viewHolder.btn.setOnClickListener(this);
+            viewHolder.time.setText(data.time);
+        }
+
+
 
 
         return convertView;
@@ -121,8 +148,36 @@ public class ListAdapter extends ArrayAdapter<String> implements View.OnClickLis
     public final static class ViewHolder {
         ImageButton btn;
         TextView text;
+        TextView time;
     }
 
+    public final static class itemHolder{
+        int btn;
+        String text;
+        String time;
+        int type;
+    }
+
+    // We implement this method to return 'true' for all view types we want to pin
+    @Override
+    public int getViewTypeCount() {
+        return 3;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (mitemList.get(position).type == 0)
+            return 1;
+        else
+            return 0;
+    }
+    @Override
+    public boolean isItemViewTypePinned(int viewType) {
+        if (viewType == 1)
+                return true;
+        else
+            return false;
+    }
 
 
 }
