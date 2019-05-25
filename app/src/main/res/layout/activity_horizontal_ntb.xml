@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#423752"
+    android:background="#FFF5EE"
     android:orientation="vertical">
 
     <android.support.v4.view.ViewPager
@@ -18,6 +18,7 @@
         android:id="@+id/ntb_horizontal"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        app:ntb_bg_color="#1874CD"
         app:ntb_badge_gravity="top"
         app:ntb_badge_position="right"
         app:ntb_badged="true"

@@ -107,9 +107,9 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
 
         if (data.type == 0) {
             viewHolder.btn = null;
-            convertView.setBackgroundColor(Color.parseColor("#BEBEBE"));
-            viewHolder.text.setBackgroundColor(Color.parseColor("#BEBEBE"));
-            viewHolder.time.setBackgroundColor(Color.parseColor("#BEBEBE"));
+            convertView.setBackgroundColor(Color.parseColor("#ddeef8"));
+            viewHolder.text.setBackgroundColor(Color.parseColor("#ddeef8"));
+            viewHolder.time.setBackgroundColor(Color.parseColor("#ddeef8"));
             viewHolder.text.setTextColor(Color.parseColor("#708090"));
         }
         if (data.type == 1) {

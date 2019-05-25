@@ -1,32 +1,19 @@
 package devlight.io.sample;
 
-import android.app.Activity;
-import android.content.Intent;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-
 import devlight.io.library.ntb.NavigationTabBar;
-
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by GIGAMOLE on 28.03.2016.
- */
+
 
 public class HorizontalNtbActivity extends FragmentActivity {
 
@@ -43,6 +30,7 @@ public class HorizontalNtbActivity extends FragmentActivity {
     private void initUI()  {
         // 找到 viewpager
         final ViewPager viewPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
+        viewPager.setBackgroundColor(Color.parseColor("#FFF5EE"));
         List<Fragment> view_container = new ArrayList<Fragment>();
         PageTodolist pageTodolist = new PageTodolist();
         view_container.add(pageTodolist);
@@ -52,16 +40,6 @@ public class HorizontalNtbActivity extends FragmentActivity {
 
         view_container.add(pageCalender);
         view_container.add(pageLemon);
-//        // 找到三个页面，放入容器中
-//        final View page1_todolist = LayoutInflater.from(
-//                getBaseContext()).inflate(R.layout.page1_todolist, null, false);
-//        Intent intent = new Intent(this, PageTodolist.class);
-//
-//
-//        final View page2_calender = LayoutInflater.from(
-//                getBaseContext()).inflate(R.layout.page2_calender,null,false);
-//        final View page3_lemon = LayoutInflater.from(
-//                getBaseContext()).inflate(R.layout.page3_lemon,null,false);
 
 
 
@@ -73,16 +51,9 @@ public class HorizontalNtbActivity extends FragmentActivity {
 
             @Override
             public Fragment getItem(int position){
-                String a = "这是页面" +position;
-                Log.i("getItem!",a);
                 return view_container.get(position);
             }
 
-//            @Override
-//            public Object instantiateItem(final ViewGroup container, final int position) {
-//                container.addView(view_container.get(position));
-//                return view_container.get(position);
-//            }
         });
 
         final String[] colors = getResources().getStringArray(R.array.default_preview);
@@ -92,8 +63,7 @@ public class HorizontalNtbActivity extends FragmentActivity {
         models.add(
                 new NavigationTabBar.Model.Builder(
                         getResources().getDrawable(R.drawable.ic_list),
-                        Color.parseColor(colors[3]))
-//                        .selectedIcon(getResources().getDrawable(R.drawable.ic_eighth))
+                        Color.parseColor(colors[2]))
                         .title("List")
                         .badgeTitle("state")
                         .build()
@@ -102,18 +72,15 @@ public class HorizontalNtbActivity extends FragmentActivity {
         models.add(
                 new NavigationTabBar.Model.Builder(
                         getResources().getDrawable(R.drawable.ic_calendar),
-                        Color.parseColor(colors[1]))
-//                        .selectedIcon(getResources().getDrawable(R.drawable.ic_eighth))
+                        Color.parseColor(colors[5]))
                         .title("Calendar")
-                        // .badgeTitle("with")
                         .build()
         );
         models.add(
                 new NavigationTabBar.Model.Builder(
                         getResources().getDrawable(R.drawable.ic_lemon),
-                        Color.parseColor(colors[2]))
+                        Color.parseColor(colors[1]))
                         .title("Lemon Tree")
-                        //  .badgeTitle("with")
                         .build()
         );
 

@@ -3,26 +3,19 @@ package devlight.io.sample;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 
 import java.util.ArrayList;
@@ -49,7 +42,7 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
 
 
         ListAdapter.itemHolder test2;
-        for(int i=0;i<20;i++){
+        for(int i=0;i<10;i++){
             test2 = new ListAdapter.itemHolder();
             test2.text = "todolist"+i;
             test2.time = i+":00 pm";
@@ -64,7 +57,7 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
         list.add(test3);
 
         ListAdapter.itemHolder test4;
-        for(int i=0;i<20;i++){
+        for(int i=0;i<10;i++){
             test4 = new ListAdapter.itemHolder();
             test4.text="alreadydolist"+i;
             test4.time = i+":pm";
@@ -76,7 +69,8 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
 
 
         todoList = (ListView) view.findViewById(R.id.todolist);
-        addbutton=view.findViewById(R.id.addbutton);
+
+        addbutton = view.findViewById(R.id.add_btn);
         listAdapter = new ListAdapter(getActivity(),R.layout.item_todolist,list,todoList);
         listAdapter.setOnInnerItemOnClickListener(this);
         todoList.setAdapter(listAdapter);
@@ -130,7 +124,6 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
             }
         });
     }
-
 
 
     private AnimatorSet getDeleteAnimation(int position){

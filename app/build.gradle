@@ -26,10 +26,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':navigationtabbar')
-//    implementation project(':library')
-
-
-//    compile 'com.github.devlight.navigationtabbar:navigationtabbar:1.2.3'
 
 
     implementation 'com.android.support:support-v4:28.0.0'
