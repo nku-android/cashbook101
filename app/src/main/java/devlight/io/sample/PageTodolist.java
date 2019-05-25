@@ -5,7 +5,10 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -15,6 +18,12 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.ListView;
+
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +36,7 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
     private List<ListAdapter.itemHolder> list = new ArrayList<ListAdapter.itemHolder>();
     private ListView todoList;
     private ListAdapter listAdapter;
+    private FloatingActionButton addbutton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,9 +76,19 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
 
 
         todoList = (ListView) view.findViewById(R.id.todolist);
+        addbutton=view.findViewById(R.id.addbutton);
         listAdapter = new ListAdapter(getActivity(),R.layout.item_todolist,list,todoList);
         listAdapter.setOnInnerItemOnClickListener(this);
         todoList.setAdapter(listAdapter);
+
+        addbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().startActivity(new Intent(getActivity(), addtask.class));
+
+            }
+        });
+
 
         return view;
     }
