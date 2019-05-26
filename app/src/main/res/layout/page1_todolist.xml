@@ -18,10 +18,9 @@
 
     <de.halfbit.pinnedsection.PinnedSectionListView
         android:id="@+id/todolist"
-        android:layout_marginTop="60dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
+        android:layout_marginTop="60dp" />
 
 
 
