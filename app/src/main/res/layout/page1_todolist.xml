@@ -1,35 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/main_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="4">
+    android:background="#FFFFFF">
 
 
     <Button
         android:id="@+id/more_btn"
         android:layout_gravity="end"
+        android:layout_marginTop="10dp"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@drawable/ic_more" />
 
-    <TextView
-        android:id="@+id/txt_vp_item_list"
+    <de.halfbit.pinnedsection.PinnedSectionListView
+        android:id="@+id/todolist"
+        android:layout_marginTop="60dp"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="30dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/bg_round_rect"
-        android:gravity="center"
-        android:text="Todolist"
-        android:textColor="#9b92b3"
-        android:textStyle="bold"/>
+        android:src="@drawable/ic_add"
+        android:id="@+id/add_btn"
+        android:backgroundTint="#dddddd"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        app:layout_anchor="@id/todolist"
+        app:layout_anchorGravity="bottom|right"
+        />
 
 
-</LinearLayout>
+
+
+
+</android.support.design.widget.CoordinatorLayout>

@@ -26,8 +26,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':navigationtabbar')
+
     implementation 'me.nlmartian.silkcal:library:0.1.1'
-//    compile 'com.github.devlight.navigationtabbar:navigationtabbar:1.2.3'
 
 
     implementation 'com.android.support:support-v4:28.0.0'
@@ -35,4 +35,11 @@ dependencies {
     implementation 'com.android.support:design:28.0.0'
     implementation 'org.jetbrains:annotations:15.0'
 
+    implementation 'de.halfbit:pinned-section-listview:1.0.0'
+
+    implementation 'com.contrarywind:Android-PickerView:4.1.6'
+    implementation 'com.weigan:loopView:0.1.2'
+
+
 }
+
