@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -33,13 +35,15 @@ public class PageCalender extends Fragment {
 
         dbHelper = MySQLiteOpenHelper.getInstance(getContext());
 
-        String sql = "SELECT * FROM tb_todo";
+        String sql = String.format(Locale.getDefault(), "SELECT * FROM %s", TodoItem.DB_NAME);
         Cursor cursor = dbHelper.getWritableDatabase().rawQuery(sql, null);
 
         ContentValues cv = new ContentValues();
         while (cursor.moveToNext()) {
-            DatabaseUtils.cursorStringToContentValues(cursor, "title", cv);
-            DatabaseUtils.cursorIntToContentValues(cursor, "alert_time", cv);
+            DatabaseUtils.cursorStringToContentValues(cursor, TodoItem.TITLE, cv);
+            DatabaseUtils.cursorStringToContentValues(cursor, TodoItem.IS_DONE, cv);
+            DatabaseUtils.cursorStringToContentValues(cursor, TodoItem.ALERT_TIME, cv);
+
         }
 
     }

@@ -45,6 +45,10 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         cv.put("title", "提醒1");
         cv.put("is_done", true);
         db.insert("tb_todo", null, cv);
+
+        cv.put("title", "提醒2");
+        cv.put("is_done", false);
+        db.insert("tb_todo", null, cv);
     }
 
     @Override
