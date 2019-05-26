@@ -1,35 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="4">
 
 
-    <Button
-        android:id="@+id/more_btn"
-        android:layout_gravity="end"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/ic_more" />
-
-    <TextView
-        android:id="@+id/txt_vp_item_list"
+    <devlight.io.sample.components.CustomDayPickerView xmlns:calendar="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/calendar_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="30dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/bg_round_rect"
-        android:gravity="center"
-        android:text="日历"
-        android:textColor="#9b92b3"
-        android:textStyle="bold"/>
+        android:layout_height="260dp"
+        android:background="@android:color/white"
+        calendar:drawRoundRect="false" />
 
 
 </LinearLayout>

@@ -19,16 +19,17 @@ public class HorizontalNtbActivity extends FragmentActivity {
 
     FragmentManager fm = getSupportFragmentManager();
 
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_horizontal_ntb);
         initUI();
-
     }
 
-    private void initUI()  {
+    private void initUI() {
         // 找到 viewpager
+
         final ViewPager viewPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
         viewPager.setBackgroundColor(Color.parseColor("#FFF5EE"));
         List<Fragment> view_container = new ArrayList<Fragment>();
@@ -37,6 +38,7 @@ public class HorizontalNtbActivity extends FragmentActivity {
 
         PageLemon pageLemon = new PageLemon();
         PageCalender pageCalender = new PageCalender();
+
 
         view_container.add(pageCalender);
         view_container.add(pageLemon);
@@ -58,7 +60,7 @@ public class HorizontalNtbActivity extends FragmentActivity {
 
         final String[] colors = getResources().getStringArray(R.array.default_preview);
 
-        final NavigationTabBar navigationTabBar = (NavigationTabBar) findViewById(R.id.ntb_horizontal);
+        final NavigationTabBar navigationTabBar = findViewById(R.id.ntb_horizontal);
         final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
         models.add(
                 new NavigationTabBar.Model.Builder(
@@ -85,7 +87,6 @@ public class HorizontalNtbActivity extends FragmentActivity {
         );
 
 
-
         navigationTabBar.setModels(models);
         navigationTabBar.setViewPager(viewPager, 0);
         navigationTabBar.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -102,22 +103,19 @@ public class HorizontalNtbActivity extends FragmentActivity {
 
             @Override
             public void onPageScrollStateChanged(final int state) {
-
+                Log.i(TAG, String.format("onPageScrollStateChanged: state: %d", state));
             }
         });
 
-        navigationTabBar.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < navigationTabBar.getModels().size(); i++) {
-                    final NavigationTabBar.Model model = navigationTabBar.getModels().get(i);
-                    navigationTabBar.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            //model.showBadge();
-                        }
-                    }, i * 100);
-                }
+        navigationTabBar.postDelayed(() -> {
+            for (int i = 0; i < navigationTabBar.getModels().size(); i++) {
+                final NavigationTabBar.Model model = navigationTabBar.getModels().get(i);
+                navigationTabBar.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //model.showBadge();
+                    }
+                }, i * 100);
             }
         }, 500);
     }
