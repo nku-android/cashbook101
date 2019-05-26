@@ -38,8 +38,9 @@ dependencies {
     implementation 'de.halfbit:pinned-section-listview:1.0.0'
 
     implementation 'com.contrarywind:Android-PickerView:4.1.6'
+
     implementation 'com.weigan:loopView:0.1.2'
-
-
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }
 

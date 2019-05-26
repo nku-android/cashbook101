@@ -3,22 +3,24 @@ package devlight.io.sample;
 
 import android.graphics.Color;
 import android.os.Bundle;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import devlight.io.library.ntb.NavigationTabBar;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import devlight.io.library.ntb.NavigationTabBar;
 
 
 public class HorizontalNtbActivity extends FragmentActivity {
 
     FragmentManager fm = getSupportFragmentManager();
-
+    private final String TAG = getClass().getName();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -27,12 +29,14 @@ public class HorizontalNtbActivity extends FragmentActivity {
         initUI();
     }
 
+
+
     private void initUI() {
         // 找到 viewpager
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
+        final ViewPager viewPager = findViewById(R.id.vp_horizontal_ntb);
         viewPager.setBackgroundColor(Color.parseColor("#FFF5EE"));
-        List<Fragment> view_container = new ArrayList<Fragment>();
+        List<Fragment> view_container = new ArrayList<>();
         PageTodolist pageTodolist = new PageTodolist();
         view_container.add(pageTodolist);
 
@@ -44,7 +48,6 @@ public class HorizontalNtbActivity extends FragmentActivity {
         view_container.add(pageLemon);
 
 
-
         viewPager.setAdapter(new FragmentPagerAdapter(fm) {
             @Override
             public int getCount() {
@@ -52,7 +55,7 @@ public class HorizontalNtbActivity extends FragmentActivity {
             }
 
             @Override
-            public Fragment getItem(int position){
+            public Fragment getItem(int position) {
                 return view_container.get(position);
             }
 

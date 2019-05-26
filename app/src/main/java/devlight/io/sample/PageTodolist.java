@@ -5,6 +5,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,10 +18,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 
-
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 public class PageTodolist extends Fragment implements ListAdapter.InnerItemOnclickListener {
@@ -32,8 +31,8 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
     private FloatingActionButton addbutton;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.page1_todolist,container,false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.page1_todolist, container, false);
 
         ListAdapter.itemHolder test1 = new ListAdapter.itemHolder();
         test1.text = "主人~ 努力啊，还有这么多没完成呢~";
@@ -42,36 +41,35 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
 
 
         ListAdapter.itemHolder test2;
-        for(int i=0;i<10;i++){
+        for (int i = 0; i < 10; i++) {
             test2 = new ListAdapter.itemHolder();
-            test2.text = "todolist"+i;
-            test2.time = i+":00 pm";
+            test2.text = "todolist" + i;
+            test2.time = i + ":00 pm";
             test2.btn = R.drawable.ic_button_off;
             test2.type = 1;
             list.add(test2);
         }
 
         ListAdapter.itemHolder test3 = new ListAdapter.itemHolder();
-        test3.text="哇哦~超级棒!";
+        test3.text = "哇哦~超级棒!";
         test3.type = 0;
         list.add(test3);
 
         ListAdapter.itemHolder test4;
-        for(int i=0;i<10;i++){
+        for (int i = 0; i < 10; i++) {
             test4 = new ListAdapter.itemHolder();
-            test4.text="alreadydolist"+i;
-            test4.time = i+":pm";
-            test4.btn=R.drawable.ic_button_on;
+            test4.text = "alreadydolist" + i;
+            test4.time = i + ":pm";
+            test4.btn = R.drawable.ic_button_on;
             test4.type = 2;
             list.add(test4);
         }
 
 
-
-        todoList = (ListView) view.findViewById(R.id.todolist);
+        todoList = view.findViewById(R.id.todolist);
 
         addbutton = view.findViewById(R.id.add_btn);
-        listAdapter = new ListAdapter(getActivity(),R.layout.item_todolist,list,todoList);
+        listAdapter = new ListAdapter(getActivity(), R.layout.item_todolist, list, todoList);
         listAdapter.setOnInnerItemOnClickListener(this);
         todoList.setAdapter(listAdapter);
 
@@ -90,7 +88,7 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
 
     @Override
     public void itemClick(View v) {
-        ImageButton btn =  getView().findViewById(v.getId());
+        ImageButton btn = getView().findViewById(v.getId());
         int position = (int) v.getTag();
 
         AnimatorSet animatorSet = getDeleteAnimation(position);
@@ -105,7 +103,7 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
             public void onAnimationEnd(Animator animation) {
                 remove(position);
                 // 动画结束后，恢复ListView所有子View的属性
-                for (int i=0; i<todoList.getChildCount() ;++i){
+                for (int i = 0; i < todoList.getChildCount(); ++i) {
                     View v = todoList.getChildAt(i);
                     v.setAlpha(1f);
                     v.setTranslationY(0);
@@ -126,7 +124,7 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
     }
 
 
-    private AnimatorSet getDeleteAnimation(int position){
+    private AnimatorSet getDeleteAnimation(int position) {
 
         // 存储所有的Animator，利用AnimatorSet直接播放
         ArrayList<Animator> animators = new ArrayList<Animator>();
@@ -148,9 +146,9 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
 
         int delay = 500;
         int firstViewToMove = position + 1;
-        for (int i=firstViewToMove;i < todoList.getChildCount(); ++i){
+        for (int i = firstViewToMove; i < todoList.getChildCount(); ++i) {
             View viewToMove = todoList.getChildAt(i);
-            ObjectAnimator moveAnimator = ObjectAnimator.ofFloat(viewToMove, "translationY", 0,  - viewHeight);
+            ObjectAnimator moveAnimator = ObjectAnimator.ofFloat(viewToMove, "translationY", 0, -viewHeight);
             moveAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
             moveAnimator.setStartDelay(delay);
 
@@ -166,8 +164,8 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
 
     }
 
-    private void remove(int position){
-        if (position < list.size()){
+    private void remove(int position) {
+        if (position < list.size()) {
             list.remove(position);
         }
         listAdapter.notifyDataSetChanged();
