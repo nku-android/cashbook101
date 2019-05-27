@@ -43,9 +43,10 @@
 
 
 <!--</LinearLayout>-->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rl_root_splash_activity"
+    android:id="@+id/lemon_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="100dp"
@@ -54,23 +55,17 @@
     android:paddingRight="16dp"
     android:paddingStart="16dp">
 
-    <!--<com.github.jorgecastillo.FillableLoader-->
-        <!--android:id="@+id/fillableLoader"-->
-        <!--android:layout_width="200dp"-->
-        <!--android:layout_height="100dp"-->
-        <!--app:fl_clippingTransform="waves"-->
-        <!--app:fl_fillColor="#1c9ade"-->
-        <!--app:fl_fillDuration="5000"-->
-        <!--app:fl_originalHeight="970"-->
-        <!--app:fl_originalWidth="970"-->
-        <!--app:fl_strokeColor="#1c9ade"-->
-        <!--app:fl_strokeDrawingDuration="2000"-->
-        <!--app:fl_strokeWidth="16dp" />-->
+    <com.github.jorgecastillo.FillableLoader
+        android:id="@+id/fillableLoader"
+        android:layout_width="211dp"
+        android:layout_height="300dp"
+        app:fl_fillColor="#EF5350"
+        app:fl_originalWidth="2114"
+        app:fl_originalHeight="3000"
+        app:fl_clippingTransform="spikes"
+        app:fl_fillDuration="5000"
+        android:layout_gravity="center"
+        />
 
-    <!--<com.github.jorgecastillo.FillableLoader-->
-        <!--android:id="@+id/fillableLoader"-->
-        <!--android:layout_width="200dp"-->
-        <!--android:layout_height="100dp"-->
-        <!--/>-->
 
 </RelativeLayout>
