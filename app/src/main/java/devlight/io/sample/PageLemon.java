@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.github.jorgecastillo.FillableLoader;
+//import com.github.jorgecastillo.FillableLoader;
 
 
 public class PageLemon extends Fragment {

@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -26,6 +27,8 @@ import java.util.List;
 
 import devlight.io.sample.components.MySQLiteOpenHelper;
 
+import static android.content.ContentValues.TAG;
+
 
 public class PageTodolist extends Fragment implements ListAdapter.InnerItemOnclickListener {
 
@@ -38,10 +41,14 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
 
 
 
+
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.page1_todolist, container, false);
         dbHelper = MySQLiteOpenHelper.getInstance(getContext());
+
+
 
         ListAdapter.itemHolder title_undo = new ListAdapter.itemHolder();
         title_undo.text = "主人~ 努力啊，还有这么多没完成呢~";
@@ -107,7 +114,6 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
 //            list.add(test4);
 //        }
 
-
         todoList = view.findViewById(R.id.todolist);
 
         FloatingActionButton addbutton;
@@ -125,6 +131,7 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
         });
 
 
+
         return view;
     }
 
@@ -133,6 +140,18 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
     public void itemClick(View v) {
         ImageButton btn = getView().findViewById(v.getId());
         int position = (int) v.getTag();
+
+//        ImageButton delete;
+//        delete= getView().findViewById(R.id.delete_btn);
+//        delete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                SQLiteDatabase db = dbHelper.getWritableDatabase();
+////                db.delete("tb_todo","id= ?",new String[]{list.get(position).id+""});
+//                // getActivity().startActivity(new Intent(getActivity(), addtask.class));
+//                Log.i(TAG,"delete");
+//            }
+//        });
 
         AnimatorSet animatorSet = getDeleteAnimation(position);
         animatorSet.start();

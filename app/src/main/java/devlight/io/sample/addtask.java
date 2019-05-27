@@ -173,8 +173,9 @@ public class addtask extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         displayDatabaseInfo();
                         Toast.makeText(addtask.this, "设置成功", Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(addtask.this, PageTodolist.class);
-//                        startActivity(intent);
+                        Intent intent = new Intent(addtask.this, HorizontalNtbActivity.class);
+                        intent.putExtra("id",1);
+                        startActivity(intent);
                     }
                 });
                 alterDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
