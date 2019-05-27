@@ -4,23 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="devlight.io.sample.lemontime">
+    android:background="@drawable/back1"
+    tools:context=".PageLemon">
 
     <TextView
         android:id="@+id/time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="lemon"/>
-
+        android:layout_below="@+id/button"
+        android:layout_marginTop="25dp"
+        android:gravity="center"
+        android:textSize="28sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="LemonTime" />
 
     <Button
-        android:id="@+id/begin"
-        android:layout_width="match_parent"
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/time"
-        android:layout_marginTop="1dp"
-        android:text="开始" />
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="300dp"
+        android:gravity="center_horizontal"
+        android:textColor="@color/colorPrimaryDark"
+        android:background="#00000000"
+        android:textSize="20sp"
+        android:text="开始学习" />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="false"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="90dp"
+        android:text="请设置不能玩手机的时长，我会监督你哦~"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp" />
 
 
 </RelativeLayout>
