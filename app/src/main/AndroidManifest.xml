@@ -23,7 +23,7 @@
             android:name=".HorizontalNtbActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
 
-        <activity android:name=".SamplesNtbActivity" />
+        <activity android:name=".addtask" />
 
         <provider
             android:name=".components.DbContentProvider"

@@ -26,7 +26,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         return instance;
     }
 
-    private MySQLiteOpenHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+    public MySQLiteOpenHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 
@@ -37,6 +37,9 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE tb_todo (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "title Text not null," +
+                "content Text,"+
+                "clock Text,"+
+                "importance INTEGER default 0,"+
                 "alert_time datetime," +
                 "is_done bool default 0" +
                 ");");
