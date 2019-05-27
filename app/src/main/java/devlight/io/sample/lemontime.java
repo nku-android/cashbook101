@@ -22,7 +22,7 @@ public class lemontime extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.page3_lemon);
 
-        button = (Button) findViewById(R.id.begin);
+        button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

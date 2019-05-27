@@ -6,6 +6,7 @@
         <item>#76afcf</item>
         <item>#dd6495</item>
         <item>#72d3b4</item>
+        <item>#3CB371</item>
     </string-array>
     <declare-styleable name="NavigationTabBar"><attr format="boolean" name="ntb_titled"/><attr format="boolean" name="ntb_badged"/><attr format="boolean" name="ntb_scaled"/><attr format="boolean" name="ntb_tinted"/><attr format="boolean" name="ntb_swiped"/><attr format="boolean" name="ntb_badge_use_typeface"/><attr format="dimension" name="ntb_title_size"/><attr format="enum" name="ntb_title_mode">
             <enum name="all" value="0"/>
