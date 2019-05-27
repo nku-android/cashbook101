@@ -1,19 +1,17 @@
 package devlight.io.sample;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,37 +20,116 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import devlight.io.sample.components.CustomDayPickerView;
 import devlight.io.sample.components.MySQLiteOpenHelper;
+import me.nlmartian.silkcal.DatePickerController;
+import me.nlmartian.silkcal.SimpleMonthAdapter;
 
 public class PageCalender extends Fragment {
     private final String TAG = getClass().getName();
-    private MySQLiteOpenHelper dbHelper;
-
+    private MySQLiteOpenHelper dbHelper = MySQLiteOpenHelper.getInstance(getContext());
+    private ListAdapter mListAdapter;
 
     @BindView(R.id.one_day_todo)
     ListView one_day_todo;
+
+    @BindView(R.id.calendar_view)
+    CustomDayPickerView dayPickerView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.page2_calender, container, false);
         ButterKnife.bind(this, view);
 
+        ArrayList<ListAdapter.itemHolder> list = getOneDayTodo(MyDateUtils.getTodayTimestamp());
+        mListAdapter = new ListAdapter(getContext(), R.layout.item_todolist, list, one_day_todo);
+        one_day_todo.setAdapter(mListAdapter);
+
+        mListAdapter.setOnInnerItemOnClickListener(v -> {
+            int position = (int) v.getTag();
+            AnimatorSet animatorSet = Animations.DeleteAnimation(one_day_todo, position);
+            animatorSet.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    for (int i = 0; i < one_day_todo.getChildCount(); ++i) {
+                        View v = one_day_todo.getChildAt(i);
+                        v.setAlpha(1f);
+
+                    }
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+
+            animatorSet.start();
+
+            if (position < list.size()) {
+                if (list.get(position).type == 1) {
+                    ContentValues values = new ContentValues();
+                    values.put("is_done", 1);
+                    dbHelper.getWritableDatabase().update("tb_todo", values, "id=?", new String[]{list.get(position).id + ""});
+                    list.remove(position);
+                }
+
+            }
+
+        });
+        SimpleMonthAdapter.CalendarDay today = new SimpleMonthAdapter.CalendarDay(System.currentTimeMillis());
+        this.dayPickerView.setController(new DatePickerController() {
+
+            @Override
+            public int getMaxYear() {
+                return 0;
+            }
+
+            @Override
+            public void onDayOfMonthSelected(int year, int month, int day) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, month, day, 0, 0, 0);
+                mListAdapter.setmItemList(getOneDayTodo(calendar.getTimeInMillis()));
+                one_day_todo.setAdapter(mListAdapter);
+
+                Toast.makeText(getContext(), String.format(Locale.CHINA, "select %d年%d月%d日", year, month + 1, day), Toast.LENGTH_SHORT).show();
+
+            }
+
+
+            @Override
+            public void onDateRangeSelected(SimpleMonthAdapter.SelectedDays<SimpleMonthAdapter.CalendarDay> selectedDays) {
+
+            }
+        });
+
+        this.dayPickerView.getAdapter().setSelectedDay(today);
+        this.dayPickerView.getController().onDayOfMonthSelected(today.getYear(), today.getMonth(), today.getDay());
+
+        return view;
+    }
+
+    ArrayList<ListAdapter.itemHolder> getOneDayTodo(long today_start) {
+        long today_end = today_start + 86400000;
+
+        String sql = "SELECT * FROM tb_todo where (alert_time >= ? AND alert_time < ?)";
+
+        Cursor cursor = dbHelper.getWritableDatabase().rawQuery(sql, new String[]{Long.toString(today_start), Long.toString(today_end)});
+
         ArrayList<ListAdapter.itemHolder> list = new ArrayList<>();
 
-        this.dbHelper = MySQLiteOpenHelper.getInstance(getContext());
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        long today_start = calendar.getTimeInMillis();
-        long today_end = today_start + 86400;
-
-        String sql = "SELECT * FROM tb_todo where alert_time > ? and alert_time < ?";
-        Cursor cursor = this.dbHelper.getWritableDatabase().rawQuery(sql, new String[]{Long.toString(today_start), Long.toString(today_end)});
         while (cursor.moveToNext()) {
 
             ContentValues cv = new ContentValues();
@@ -63,23 +140,13 @@ public class PageCalender extends Fragment {
             ListAdapter.itemHolder item = new ListAdapter.itemHolder();
 
             item.text = cv.getAsString("title");
-            item.time = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA).format(cv.getAsLong("alert_time"));
+            item.time = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(cv.getAsLong("alert_time"));
 
-            item.type = cv.getAsInteger("is_done");
+            item.type = 1;
             item.id = cv.getAsInteger("id");
             list.add(item);
         }
 
-
-        ListAdapter mListAdapter = new ListAdapter(getContext(), R.layout.item_todolist, list, one_day_todo);
-        one_day_todo.setAdapter(mListAdapter);
-
-
-        return view;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        return list;
     }
 }

@@ -134,7 +134,7 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
         ImageButton btn = getView().findViewById(v.getId());
         int position = (int) v.getTag();
 
-        AnimatorSet animatorSet = getDeleteAnimation(position);
+        AnimatorSet animatorSet = Animations.DeleteAnimation(todoList, position);
         animatorSet.start();
         animatorSet.addListener(new Animator.AnimatorListener() {
             @Override
@@ -166,46 +166,6 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
         });
     }
 
-
-    private AnimatorSet getDeleteAnimation(int position) {
-
-        // 存储所有的Animator，利用AnimatorSet直接播放
-        ArrayList<Animator> animators = new ArrayList<Animator>();
-        //获取显示的一个view的position
-        int firstVisiblePosition = todoList.getFirstVisiblePosition();
-        View deleteView = todoList.getChildAt(position - firstVisiblePosition);
-        int viewHeight = deleteView.getHeight();
-        int viewWidth = deleteView.getWidth();
-
-        //平移动画
-        ObjectAnimator translationXAnimator = ObjectAnimator.ofFloat(deleteView, "translationX", viewWidth);
-        translationXAnimator.setDuration(500);
-        animators.add(translationXAnimator);
-
-        //透明动画
-        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(deleteView, "alpha", 1, 0);
-        alphaAnimator.setDuration(500);
-        animators.add(alphaAnimator);
-
-        int delay = 500;
-        int firstViewToMove = position + 1;
-        for (int i = firstViewToMove; i < todoList.getChildCount(); ++i) {
-            View viewToMove = todoList.getChildAt(i);
-            ObjectAnimator moveAnimator = ObjectAnimator.ofFloat(viewToMove, "translationY", 0, -viewHeight);
-            moveAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-            moveAnimator.setStartDelay(delay);
-
-            delay += 100;
-
-            animators.add(moveAnimator);
-        }
-        //动画集合
-        AnimatorSet animationSet = new AnimatorSet();
-        animationSet.playTogether(animators);
-
-        return animationSet;
-
-    }
 
     private void remove(int position) {
         if (position < list.size()) {

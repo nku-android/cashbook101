@@ -28,7 +28,7 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
     private boolean isScrollDown;
     private int mFirstTop, mFirstPosition;
     private InnerItemOnclickListener mListener;
-    private List<itemHolder> mitemList;
+    private List<itemHolder> mItemList;
 
     @SuppressLint("ResourceType")
     public ListAdapter(Context context, int textViewResourceId, List<itemHolder> objects, ListView mlistView) {
@@ -36,7 +36,7 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
         resourceId = textViewResourceId;
         listView = mlistView;
         animation = AnimationUtils.loadAnimation(context, R.animator.item_list_in_anim);
-        mitemList = objects;
+        mItemList = objects;
 
         AbsListView.OnScrollListener mOnScrollListener = new AbsListView.OnScrollListener() {
             @Override
@@ -163,7 +163,7 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
 
     @Override
     public int getItemViewType(int position) {
-        if (mitemList.get(position).type == 0)
+        if (mItemList.get(position).type == 0)
             return 1;
         else
             return 0;
@@ -177,5 +177,7 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
             return false;
     }
 
-
+    public void setmItemList(List<itemHolder> mItemList) {
+        this.mItemList = mItemList;
+    }
 }
