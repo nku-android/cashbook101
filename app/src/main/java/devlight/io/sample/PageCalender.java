@@ -17,7 +17,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
 
 import butterknife.BindArray;
@@ -40,15 +42,34 @@ public class PageCalender extends Fragment {
         ButterKnife.bind(this, view);
 
         ArrayList<ListAdapter.itemHolder> list = new ArrayList<>();
-        ListAdapter.itemHolder test2;
-        for (int i = 0; i < 10; i++) {
-            test2 = new ListAdapter.itemHolder();
-            test2.text = "todolist" + i;
-            test2.time = i + ":00 pm";
-            test2.btn = R.drawable.ic_button_off;
-            test2.type = 1;
-            list.add(test2);
+
+        this.dbHelper = MySQLiteOpenHelper.getInstance(getContext());
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        long today_start = calendar.getTimeInMillis();
+        long today_end = today_start + 86400;
+
+        String sql = "SELECT * FROM tb_todo where alert_time > ? and alert_time < ?";
+        Cursor cursor = this.dbHelper.getWritableDatabase().rawQuery(sql, new String[]{Long.toString(today_start), Long.toString(today_end)});
+        while (cursor.moveToNext()) {
+
+            ContentValues cv = new ContentValues();
+            DatabaseUtils.cursorStringToContentValues(cursor, "title", cv);
+            DatabaseUtils.cursorLongToContentValues(cursor, "alert_time", cv);
+            DatabaseUtils.cursorIntToContentValues(cursor, "id", cv);
+            DatabaseUtils.cursorIntToContentValues(cursor, "is_done", cv);
+            ListAdapter.itemHolder item = new ListAdapter.itemHolder();
+
+            item.text = cv.getAsString("title");
+            item.time = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA).format(cv.getAsLong("alert_time"));
+
+            item.type = cv.getAsInteger("is_done");
+            item.id = cv.getAsInteger("id");
+            list.add(item);
         }
+
 
         ListAdapter mListAdapter = new ListAdapter(getContext(), R.layout.item_todolist, list, one_day_todo);
         one_day_todo.setAdapter(mListAdapter);

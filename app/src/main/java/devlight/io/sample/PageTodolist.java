@@ -21,8 +21,10 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import devlight.io.sample.components.MySQLiteOpenHelper;
 
@@ -35,7 +37,6 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
     private ListAdapter listAdapter;
     private MySQLiteOpenHelper dbHelper;
     private int insertPosition = 1;
-
 
 
     @Override
@@ -55,16 +56,15 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
         while (cursor.moveToNext()) {
             item_undo = new ListAdapter.itemHolder();
             DatabaseUtils.cursorStringToContentValues(cursor, "title", cv_undo);
-            DatabaseUtils.cursorIntToContentValues(cursor, "alert_time", cv_undo);
-            DatabaseUtils.cursorIntToContentValues(cursor,"id",cv_undo);
+            DatabaseUtils.cursorLongToContentValues(cursor, "alert_time", cv_undo);
+            DatabaseUtils.cursorIntToContentValues(cursor, "id", cv_undo);
             item_undo.text = cv_undo.getAsString("title");
-            item_undo.time = cv_undo.getAsString("alert_time");
+            item_undo.time = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(cv_undo.getAsLong("alert_time"));
             item_undo.type = 1;
             item_undo.id = cv_undo.getAsInteger("id");
             list.add(item_undo);
             insertPosition++;
         }
-
 
 
 //        for (int i = 0; i < 10; i++) {
@@ -89,10 +89,10 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
         while (cursor.moveToNext()) {
             item_done = new ListAdapter.itemHolder();
             DatabaseUtils.cursorStringToContentValues(cursor, "title", cv_done);
-            DatabaseUtils.cursorIntToContentValues(cursor, "alert_time", cv_done);
-            DatabaseUtils.cursorIntToContentValues(cursor,"id",cv_done);
+            DatabaseUtils.cursorLongToContentValues(cursor, "alert_time", cv_done);
+            DatabaseUtils.cursorIntToContentValues(cursor, "id", cv_done);
             item_done.text = cv_done.getAsString("title");
-            item_done.time = cv_done.getAsString("alert_time");
+            item_done.time = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(cv_done.getAsLong("alert_time"));
             item_done.type = 2;
             item_done.id = cv_done.getAsInteger("id");
             list.add(item_done);
@@ -209,24 +209,24 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
 
     private void remove(int position) {
         if (position < list.size()) {
-            if(list.get(position).type == 1){
+            if (list.get(position).type == 1) {
                 ContentValues values = new ContentValues();
-                values.put("is_done",1);
-                dbHelper.getWritableDatabase().update("tb_todo",values,"id=?",new String[]{list.get(position).id+""});
+                values.put("is_done", 1);
+                dbHelper.getWritableDatabase().update("tb_todo", values, "id=?", new String[]{list.get(position).id + ""});
                 insertPosition--;
-                ListAdapter.itemHolder change_item =  list.get(position);
+                ListAdapter.itemHolder change_item = list.get(position);
                 list.remove(position);
                 change_item.type = 2;
                 list.add(change_item);
 
-            }else{
+            } else {
                 ContentValues values = new ContentValues();
-                values.put("is_done",0);
-                dbHelper.getWritableDatabase().update("tb_todo",values,"id=?",new String[]{list.get(position).id+""});
-                ListAdapter.itemHolder change_item =  list.get(position);
+                values.put("is_done", 0);
+                dbHelper.getWritableDatabase().update("tb_todo", values, "id=?", new String[]{list.get(position).id + ""});
+                ListAdapter.itemHolder change_item = list.get(position);
                 list.remove(position);
                 change_item.type = 1;
-                list.add(insertPosition,change_item);
+                list.add(insertPosition, change_item);
                 insertPosition++;
             }
 

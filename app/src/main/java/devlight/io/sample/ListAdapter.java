@@ -20,8 +20,7 @@ import java.util.List;
 import de.halfbit.pinnedsection.PinnedSectionListView;
 
 
-
-public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements View.OnClickListener , PinnedSectionListView.PinnedSectionListAdapter {
+public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements View.OnClickListener, PinnedSectionListView.PinnedSectionListAdapter {
 
     private int resourceId;
     private ListView listView;
@@ -32,11 +31,11 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
     private List<itemHolder> mitemList;
 
     @SuppressLint("ResourceType")
-    public ListAdapter(Context context, int textViewResourceId, List<itemHolder> objects, ListView mlistView){
+    public ListAdapter(Context context, int textViewResourceId, List<itemHolder> objects, ListView mlistView) {
         super(context, textViewResourceId, objects);
         resourceId = textViewResourceId;
         listView = mlistView;
-        animation = AnimationUtils.loadAnimation(context,R.animator.item_list_in_anim);
+        animation = AnimationUtils.loadAnimation(context, R.animator.item_list_in_anim);
         mitemList = objects;
 
         AbsListView.OnScrollListener mOnScrollListener = new AbsListView.OnScrollListener() {
@@ -74,7 +73,7 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
         if (convertView == null) {
             //若没有缓存布局，则加载
             //首先获取布局填充器，然后使用布局填充器填充布局文件
-            convertView=LayoutInflater.from(getContext()).inflate(resourceId,null);
+            convertView = LayoutInflater.from(getContext()).inflate(resourceId, null);
 
             //存储子项布局中子控件对象
             viewHolder = new ViewHolder();
@@ -92,7 +91,7 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
         }
 
         //清除当前显示区域中所有item的动画
-        for (int i=0;i<listView.getChildCount();i++){
+        for (int i = 0; i < listView.getChildCount(); i++) {
             View view = listView.getChildAt(i);
             view.clearAnimation();
         }
@@ -126,17 +125,15 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
         }
 
 
-
-
         return convertView;
     }
 
-    interface InnerItemOnclickListener {
+    public interface InnerItemOnclickListener {
         void itemClick(View v);
     }
 
-    public void setOnInnerItemOnClickListener(InnerItemOnclickListener listener){
-        this.mListener=listener;
+    public void setOnInnerItemOnClickListener(InnerItemOnclickListener listener) {
+        this.mListener = listener;
     }
 
     @Override
@@ -151,11 +148,11 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
         TextView time;
     }
 
-    public final static class itemHolder{
-        String text;
-        String time;
-        int type;
-        int id;
+    public final static class itemHolder {
+        public String text;
+        public String time;
+        public int type;
+        public int id;
     }
 
     // We implement this method to return 'true' for all view types we want to pin
@@ -171,10 +168,11 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
         else
             return 0;
     }
+
     @Override
     public boolean isItemViewTypePinned(int viewType) {
         if (viewType == 1)
-                return true;
+            return true;
         else
             return false;
     }

@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
 
+import java.util.Date;
+
 public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
     @SuppressWarnings("FieldCanBeLocal")
@@ -37,17 +39,19 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE tb_todo (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "title Text not null," +
-                "alert_time datetime," +
+                "alert_time INTEGER," +
                 "is_done bool default 0" +
                 ");");
 
         ContentValues cv = new ContentValues();
         cv.put("title", "提醒1");
         cv.put("is_done", true);
+        cv.put("alert_time", System.currentTimeMillis() + 3600);
         db.insert("tb_todo", null, cv);
 
         cv.put("title", "提醒2");
         cv.put("is_done", false);
+        cv.put("alert_time", System.currentTimeMillis());
         db.insert("tb_todo", null, cv);
     }
 
