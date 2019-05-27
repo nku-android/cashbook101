@@ -1,47 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:orientation="vertical"-->
+    <!--android:weightSum="4">-->
+
+    <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+        <!--&lt;!&ndash;android:id="@+id/time"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_below="@+id/button"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_marginTop="25dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:gravity="center"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textSize="28sp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textColor="@color/colorPrimaryDark"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:text="LemonTime" />&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<Button&ndash;&gt;-->
+        <!--&lt;!&ndash;android:id="@+id/button"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_below="@+id/textView"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_centerHorizontal="true"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_marginTop="300dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:gravity="center_horizontal"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textColor="@color/colorPrimaryDark"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:background="#00000000"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textSize="20sp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:text="开始学习" />&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+        <!--&lt;!&ndash;android:id="@+id/textView"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_centerInParent="false"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_centerHorizontal="true"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_gravity="center_horizontal"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_marginTop="90dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:text="请设置不能玩手机的时长，我会监督你哦~"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textColor="@color/colorPrimaryDark"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textSize="20sp" />&ndash;&gt;-->
+
+
+<!--</LinearLayout>-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_root_splash_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/back1"
-    tools:context=".PageLemon">
+    android:paddingBottom="100dp"
+    android:paddingEnd="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingStart="16dp">
 
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button"
-        android:layout_marginTop="25dp"
-        android:gravity="center"
-        android:textSize="28sp"
-        android:textColor="@color/colorPrimaryDark"
-        android:text="LemonTime" />
+    <!--<com.github.jorgecastillo.FillableLoader-->
+        <!--android:id="@+id/fillableLoader"-->
+        <!--android:layout_width="200dp"-->
+        <!--android:layout_height="100dp"-->
+        <!--app:fl_clippingTransform="waves"-->
+        <!--app:fl_fillColor="#1c9ade"-->
+        <!--app:fl_fillDuration="5000"-->
+        <!--app:fl_originalHeight="970"-->
+        <!--app:fl_originalWidth="970"-->
+        <!--app:fl_strokeColor="#1c9ade"-->
+        <!--app:fl_strokeDrawingDuration="2000"-->
+        <!--app:fl_strokeWidth="16dp" />-->
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="300dp"
-        android:gravity="center_horizontal"
-        android:textColor="@color/colorPrimaryDark"
-        android:background="#00000000"
-        android:textSize="20sp"
-        android:text="开始学习" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="false"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="90dp"
-        android:text="请设置不能玩手机的时长，我会监督你哦~"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="20sp" />
-
+    <!--<com.github.jorgecastillo.FillableLoader-->
+        <!--android:id="@+id/fillableLoader"-->
+        <!--android:layout_width="200dp"-->
+        <!--android:layout_height="100dp"-->
+        <!--/>-->
 
 </RelativeLayout>
