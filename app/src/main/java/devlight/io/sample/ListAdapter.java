@@ -152,10 +152,10 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
     }
 
     public final static class itemHolder{
-        int btn;
         String text;
         String time;
         int type;
+        int id;
     }
 
     // We implement this method to return 'true' for all view types we want to pin
