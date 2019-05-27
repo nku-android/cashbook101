@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:hint="主题："
         android:textSize="20sp"
+        android:layout_marginTop="15dp"
         android:layout_below="@+id/textView2" />
 
     <TextView
@@ -36,7 +37,7 @@
     <EditText
         android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="200dp"
         android:layout_below="@+id/textView3"
          android:background="@drawable/editbackground" />
 
@@ -45,6 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/content"
+        android:layout_marginTop="20dp"
         android:text="时间"
         android:textSize="20sp" />
 
@@ -73,19 +75,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/location"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
             android:text="不需要提醒" />
 
         <RadioButton
             android:id="@+id/yes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
             android:text="自定义提醒" />
     </RadioGroup>
 
@@ -94,6 +98,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/clock"
+        android:textSize="20sp"
+        android:layout_marginTop="5dp"
         android:text="提醒时间" />
 
 
@@ -102,12 +108,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/clocktext"
+        android:textSize="20sp"
+        android:layout_marginTop="15dp"
         android:text="保存" />
 
     <TextView
         android:id="@+id/num"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/save" />
 
 
