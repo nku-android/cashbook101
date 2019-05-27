@@ -14,10 +14,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
+import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -26,32 +29,31 @@ import devlight.io.sample.components.MySQLiteOpenHelper;
 public class PageCalender extends Fragment {
     private final String TAG = getClass().getName();
     private MySQLiteOpenHelper dbHelper;
-    @BindView(R.id.test_btn)
-    Button testBtn;
 
-    @OnClick(R.id.test_btn)
-    public void testBtn() {
-        Log.i(TAG, "clicked");
 
-        dbHelper = MySQLiteOpenHelper.getInstance(getContext());
-
-        String sql = String.format(Locale.getDefault(), "SELECT * FROM %s", TodoItem.DB_NAME);
-        Cursor cursor = dbHelper.getWritableDatabase().rawQuery(sql, null);
-
-        ContentValues cv = new ContentValues();
-        while (cursor.moveToNext()) {
-            DatabaseUtils.cursorStringToContentValues(cursor, TodoItem.TITLE, cv);
-            DatabaseUtils.cursorStringToContentValues(cursor, TodoItem.IS_DONE, cv);
-            DatabaseUtils.cursorStringToContentValues(cursor, TodoItem.ALERT_TIME, cv);
-
-        }
-
-    }
+    @BindView(R.id.one_day_todo)
+    ListView one_day_todo;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.page2_calender, container, false);
         ButterKnife.bind(this, view);
+
+        ArrayList<ListAdapter.itemHolder> list = new ArrayList<>();
+        ListAdapter.itemHolder test2;
+        for (int i = 0; i < 10; i++) {
+            test2 = new ListAdapter.itemHolder();
+            test2.text = "todolist" + i;
+            test2.time = i + ":00 pm";
+            test2.btn = R.drawable.ic_button_off;
+            test2.type = 1;
+            list.add(test2);
+        }
+
+        ListAdapter mListAdapter = new ListAdapter(getContext(), R.layout.item_todolist, list, one_day_todo);
+        one_day_todo.setAdapter(mListAdapter);
+
+
         return view;
     }
 
