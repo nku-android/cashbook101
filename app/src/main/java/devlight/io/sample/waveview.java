@@ -1,273 +1,202 @@
 package devlight.io.sample;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.support.annotation.Nullable;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
-import android.widget.Button;
+
+import java.text.DecimalFormat;
 
 
 public class waveview extends View {
-
-    /*画布宽度*/
-    private int width;
-    /*画布高度*/
-    private int height;
-    /*sin曲线画笔*/
-    private Paint paint;
-    /*圆的画笔*/
+    private int radius = dp2px(55);
+    private int textColor;
+    private int textSize;
+    private int progressColor;
+    private int radiusColor;
     private Paint textPaint;
-    /*文本画笔*/
     private Paint circlePaint;
-    /*sin曲线的路径*/
-    private Path path;
-    /*sin曲线 1/4个周期的宽度*/
-    private int cycle = 150;
-    /*sin曲线振幅的高度*/
-    private int waveHeight = 50;
-    /*sin曲线的起点*/
-    private Point startPoint;
-    /*当前进度*/
-    private int progress;
-    /*x轴平移量*/
-    private int translateX = 40;
-    /*是否启用了动画设置进度*/
-    private boolean openAnimate = false;
-    /*是否自增长*/
-    private boolean autoIncrement = true;
+    private Paint pathPaint;
+    private Bitmap bitmap;
+    private Canvas bitmapCanvas;
+    private int width, height;
+    private int minPadding;
+    private float progress;
+    private float maxProgress;
+    private Path path = new Path();
+    private DecimalFormat df = new DecimalFormat("0.0");
 
-    public waveview(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        init(context);
+
+    public waveview(Context context) {
+        this(context, null);
     }
 
-    public waveview (Context context) {
-        super(context);
-        init(context);
+    public  waveview(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
     }
 
-    private void init(Context context) {
-//        Button button=findViewById(R.id.btn_test);
-//        button.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                path = new Path();
-                paint = new Paint();
-                paint.setAntiAlias(true);
-                paint.setStrokeWidth(dip2px(context, 5));
-                paint.setStyle(Paint.Style.FILL);
-                paint.setColor(Color.GREEN);
+    public  waveview(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.WaveProgressView, defStyleAttr, R.style.WaveProgressViewDefault);
+        radius = (int) a.getDimension(R.styleable.WaveProgressView_radius, radius);
+        textColor = a.getColor(R.styleable.WaveProgressView_progress_text_color, 0);
+        textSize = a.getDimensionPixelSize(R.styleable.WaveProgressView_progress_text_size, 0);
+        progressColor = a.getColor(R.styleable.WaveProgressView_progress_color, 0);
+        radiusColor = a.getColor(R.styleable.WaveProgressView_radius_color, 0);
+        progress = a.getFloat(R.styleable.WaveProgressView_progress, 0);
+        maxProgress = a.getFloat(R.styleable.WaveProgressView_maxProgress, 100);
+        a.recycle();
 
-                circlePaint = new Paint();
-                circlePaint.setStrokeWidth(dip2px(context, 5));
-                circlePaint.setStyle(Paint.Style.STROKE);
-                circlePaint.setAntiAlias(true);
-                circlePaint.setColor(Color.parseColor("#FF4081"));
-
-                textPaint = new Paint();
-                textPaint.setAntiAlias(true);
-                textPaint.setTextSize(dip2px(context, 20));
-                textPaint.setColor(Color.BLACK);
-            }
-   //     });
+        //初始化一些画笔
+        textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        textPaint.setTextSize(textSize);
+        textPaint.setColor(textColor);
+        textPaint.setDither(true);
 
 
-   // }
+        circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        circlePaint.setColor(radiusColor);
+        circlePaint.setDither(true);
+
+        pathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        pathPaint.setColor(progressColor);
+        pathPaint.setDither(true);
+        pathPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        //计算宽和高
+        int exceptW = getPaddingLeft() + getPaddingRight() + 2 * radius;
+        int exceptH = getPaddingTop() + getPaddingBottom() + 2 * radius;
+        int width = resolveSize(exceptW, widthMeasureSpec);
+        int height = resolveSize(exceptH, heightMeasureSpec);
+        int min = Math.min(width, height);
+
+        this.width = this.height = min;
+
+        //计算半径,减去padding的最小值
+        int minLR = Math.min(getPaddingLeft(), getPaddingRight());
+        int minTB = Math.min(getPaddingTop(), getPaddingBottom());
+        minPadding = Math.min(minLR, minTB);
+        radius = (min - minPadding * 2) / 2;
+
+        setMeasuredDimension(min, min);
+    }
+
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        //裁剪画布为圆形
-        Path circlePath = new Path();
-        circlePath.addCircle(width / 2, height / 2, width / 2, Path.Direction.CW);
-        canvas.clipPath(circlePath);
-        canvas.drawPaint(circlePaint);
-        canvas.drawCircle(width / 2, height / 2, width / 2, circlePaint);
-        //以下操作都是在这个圆形画布中操作
+        if (bitmap == null) {
+            bitmap = Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888);
+            bitmapCanvas = new Canvas(bitmap);
+        }
+        bitmapCanvas.save();
+        //移动坐标系
+        bitmapCanvas.translate(minPadding, minPadding);
+        //绘制圆
+        bitmapCanvas.drawCircle(radius, radius, radius, circlePaint);
 
-        //根据进度改变起点坐标的y值
-        startPoint.y = (int) (height - (progress / 100.0 * height));
-        //起点
-        path.moveTo(startPoint.x, startPoint.y);
-        int j = 1;
-        //循环绘制正弦曲线 循环一次半个周期
-        for (int i = 1; i <= 8; i++) {
-            if (i % 2 == 0) {
-                //波峰
-                path.quadTo(startPoint.x + (cycle * j), startPoint.y + waveHeight,
-                        startPoint.x + (cycle * 2) * i, startPoint.y);
-            } else {
-                //波谷
-                path.quadTo(startPoint.x + (cycle * j), startPoint.y - waveHeight,
-                        startPoint.x + (cycle * 2) * i, startPoint.y);
-            }
-            j += 2;
-        }
-        //绘制封闭的曲线
-        path.lineTo(width, height);//右下角
-        path.lineTo(startPoint.x, height);//左下角
-        path.lineTo(startPoint.x, startPoint.y);//起点
-        path.close();
-        canvas.drawPath(path, paint);
-
-        drawText(canvas, textPaint, progress + "%");
-        //判断是不是平移完了一个周期
-        if (startPoint.x + translateX >= 0) {
-            //满了一个周期则恢复默认起点继续平移
-            startPoint.x = -cycle * 4;
-        }
-        //每次波形的平移量 40
-        startPoint.x += translateX;
-        if (autoIncrement) {
-            if (progress >= 100) {
-                progress = 0;
-            } else {
-                progress++;
-            }
-        }
+        //绘制PATH
+        //重置绘制路线
         path.reset();
-        if (!openAnimate) {
-            postInvalidateDelayed(300);
-        }
-    }
-
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        //获取view的宽度
-        width = getViewSize(400, widthMeasureSpec);
-        //获取view的高度
-        height = getViewSize(400, heightMeasureSpec);
-        //默认从屏幕外先绘制3/4个周期 使得波峰在圆中间
-        startPoint = new Point(-cycle * 3, height / 2);
-    }
-
-
-    private int getViewSize(int defaultSize, int measureSpec) {
-        int viewSize = defaultSize;
-        //获取测量模式
-        int mode = MeasureSpec.getMode(measureSpec);
-        //获取大小
-        int size = MeasureSpec.getSize(measureSpec);
-        switch (mode) {
-            case MeasureSpec.UNSPECIFIED: //如果没有指定大小，就设置为默认大小
-                viewSize = defaultSize;
-                break;
-            case MeasureSpec.AT_MOST: //如果测量模式是最大取值为size
-                //我们将大小取最大值,你也可以取其他值
-                viewSize = size;
-                break;
-            case MeasureSpec.EXACTLY: //如果是固定的大小，那就不要去改变它
-                viewSize = size;
-                break;
-        }
-        return viewSize;
-    }
-
-    /**
-     * 绘制文字
-     *
-     * @param canvas 画布
-     * @param paint  画笔
-     * @param text   画的文字
-     */
-    private void drawText(Canvas canvas, Paint paint, String text) {
-        //画布的大小
-        Rect targetRect = new Rect(0, 0, width, height);
-        Paint.FontMetricsInt fontMetrics = paint.getFontMetricsInt();
-        int baseline = (targetRect.bottom + targetRect.top - fontMetrics.bottom - fontMetrics.top) / 2;
-        // 下面这行是实现水平居中，drawText对应改为传入targetRect.centerX()
-        paint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText(text, targetRect.centerX(), baseline, paint);
-    }
-
-    /**
-     * 根据手机的分辨率从 dip 的单位 转成为 px(像素)
-     */
-    public int dip2px(Context context, float dpValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
-    }
-
-    /**
-     * 设置振幅高度
-     *
-     * @param waveHeight 振幅
-     */
-    public void setWaveHeight(int waveHeight) {
-        this.waveHeight = waveHeight;
-        invalidate();
-    }
-
-    /**
-     * 设置sin曲线 1/4个周期的宽度
-     *
-     * @param cycle 1/4个周期的宽度
-     */
-    public void setCycle(int cycle) {
-        this.cycle = cycle;
-        invalidate();
-    }
-
-    /**
-     * 设置当前进度
-     *
-     * @param progress 进度
-     */
-    public void setProgress(int progress) {
-        if (progress > 100 || progress < 0)
-            throw new RuntimeException(getClass().getName() + "请设置[0,100]之间的值");
-        this.progress = progress;
-        autoIncrement = false;
-        invalidate();
-    }
-
-    /**
-     * 设置x轴移动量
-     *
-     * @param translateX 默认40
-     */
-    public void setTranslateX(int translateX) {
-        this.translateX = translateX;
-    }
-
-    /**
-     * 通过动画设置当前进度
-     *
-     * @param progress 进度 <=100
-     * @param duration 动画时长
-     */
-    public void setProgress(final int progress, int duration) {
-        if (progress > 100 || progress < 0)
-            throw new RuntimeException(getClass().getName() + "请设置[0,100]之间的值");
-        autoIncrement = false;
-        openAnimate = true;
-        ValueAnimator progressAnimator = ValueAnimator.ofInt(0, progress);
-        progressAnimator.setDuration(duration);
-        progressAnimator.setTarget(progress);
-        progressAnimator.setInterpolator(new LinearInterpolator());
-        progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                waveview .this.progress = (int) animation.getAnimatedValue();
-                if (waveview.this.progress == progress)
-                    openAnimate = false;
-                invalidate();
+        float percent=progress * 1.0f / maxProgress;
+        float y = (1 - percent) * radius * 2;
+        //移动到右上边
+        path.moveTo(radius * 2, y);
+        //移动到最右下方
+        path.lineTo(radius * 2, radius * 2);
+        //移动到最左下边
+        path.lineTo(0, radius * 2);
+        //移动到左上边
+        // path.lineTo(0, y);
+        //实现左右波动,根据progress来平移
+        path.lineTo(-(1 -percent) * radius*2, y);
+        if (progress != 0.0f) {
+            //根据直径计算绘制贝赛尔曲线的次数
+            int count = radius * 4 / 60;
+            //控制-控制点y的坐标
+            float point = (1 - percent) * 15;
+            for (int i = 0; i < count; i++) {
+                path.rQuadTo(15, -point, 30, 0);
+                path.rQuadTo(15, point, 30, 0);
             }
-        });
-        progressAnimator.start();
+        }
+        //闭合
+        path.close();
+        bitmapCanvas.drawPath(path, pathPaint);
+
+        //绘制文字
+        String text = progress + "%";
+        float textW = textPaint.measureText(text);
+        Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
+        float baseLine = radius - (fontMetrics.ascent + fontMetrics.descent) / 2;
+        bitmapCanvas.drawText(text, radius - textW / 2, baseLine, textPaint);
+
+        bitmapCanvas.restore();
+
+        canvas.drawBitmap(bitmap, 0, 0, null);
     }
 
-    public int getProgress() {
+    public float getProgress() {
         return progress;
+    }
+
+    public void setProgress(float progress) {
+        this.progress = Float.valueOf(df.format(progress));
+        invalidate();
+    }
+
+    private int dp2px(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+    }
+
+
+    private final static class SavedState extends BaseSavedState {
+        float progress;
+
+        public SavedState(Parcel source) {
+            super(source);
+        }
+
+        public SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        public static final Parcelable.Creator<SavedState> CREATOR
+                = new Parcelable.Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+        SavedState ss = new SavedState(superState);
+        ss.progress = progress;
+        return ss;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
+        setProgress(ss.progress);
     }
 }
