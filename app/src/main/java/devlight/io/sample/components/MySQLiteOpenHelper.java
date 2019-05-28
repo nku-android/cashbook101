@@ -28,7 +28,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         return instance;
     }
 
-    private MySQLiteOpenHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+    public MySQLiteOpenHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 
@@ -40,6 +40,9 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "title Text not null," +
                 "alert_time INTEGER," +
+                "content Text,"+
+                "clock Text,"+
+                "importance INTEGER default 0,"+
                 "is_done bool default 0" +
                 ");");
 
