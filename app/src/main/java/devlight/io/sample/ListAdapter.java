@@ -2,7 +2,9 @@ package devlight.io.sample;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,13 +62,26 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
         };
 
         listView.setOnScrollListener(mOnScrollListener);
+
+        this.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                for (int i = 0; i < mlistView.getChildCount(); ++i) {
+                    View v = mlistView.getChildAt(i);
+                    v.setAlpha(1f);
+                    v.setTranslationY(0);
+                    v.setTranslationX(0);
+                }
+            }
+        });
     }
 
     /*  由系统调用，获取一个View对象，作为ListView的条目，屏幕上能显示多少个条目，getView方法就会被调用多少次
      *  position：代表该条目在整个ListView中所处的位置，从0开始
      */
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
         itemHolder data = getItem(position);
         final ViewHolder viewHolder;
@@ -177,7 +192,9 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
             return false;
     }
 
-    public void setmItemList(List<itemHolder> mItemList) {
+    public void setItemList(List<itemHolder> mItemList) {
         this.mItemList = mItemList;
     }
+
+
 }

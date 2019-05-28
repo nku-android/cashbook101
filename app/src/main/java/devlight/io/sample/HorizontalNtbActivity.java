@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +30,6 @@ public class HorizontalNtbActivity extends FragmentActivity {
         setContentView(R.layout.activity_horizontal_ntb);
         initUI();
     }
-
 
 
     private void initUI() {
@@ -95,17 +96,21 @@ public class HorizontalNtbActivity extends FragmentActivity {
         navigationTabBar.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
-
+                Log.i(TAG, String.format("onPageScrolled %d, %f, %d", position, positionOffset, positionOffsetPixels));
             }
 
             @Override
             public void onPageSelected(final int position) {
                 navigationTabBar.getModels().get(position).hideBadge();
+                if (position == 1) {
+                    EventBus.getDefault().post(MessageEvent.UpdateTodo());
+                }
 
             }
 
             @Override
             public void onPageScrollStateChanged(final int state) {
+
                 Log.i(TAG, String.format("onPageScrollStateChanged: state: %d", state));
             }
         });
