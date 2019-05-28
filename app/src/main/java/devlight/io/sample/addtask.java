@@ -256,7 +256,6 @@ public class addtask extends Activity {
                         + hourItems.get(options2)+"时"
                         + minItems.get(options3)+"分";
                 clocktext.setText("提醒时间为："+str);
-             //   Toast.makeText(addtask.this, str, Toast.LENGTH_SHORT).show();
             }
         })
                 .setOptionsSelectChangeListener(new OnOptionsSelectChangeListener() {
@@ -293,10 +292,6 @@ public class addtask extends Activity {
         TextView num=(TextView)findViewById(R.id.num);
         num.setText("目前有:"+cursor.getCount()+"个任务");
 
-//        while (cursor.moveToNext()) {
-//            DatabaseUtils.cursorStringToContentValues(cursor, "title", cv);
-//            DatabaseUtils.cursorIntToContentValues(cursor, "alert_time", cv);
-//        }
     }
 
 }
