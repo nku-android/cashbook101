@@ -57,12 +57,12 @@
 
     <com.github.jorgecastillo.FillableLoader
         android:id="@+id/fillableLoader"
-        android:layout_width="211dp"
-        android:layout_height="300dp"
+        android:layout_width="611dp"
+        android:layout_height="800dp"
         app:fl_fillColor="#EF5350"
-        app:fl_originalWidth="2114"
-        app:fl_originalHeight="3000"
-        app:fl_clippingTransform="spikes"
+        app:fl_originalWidth="1024"
+        app:fl_originalHeight="1024"
+        app:fl_clippingTransform="waves"
         app:fl_fillDuration="5000"
         android:layout_gravity="center"
         />
