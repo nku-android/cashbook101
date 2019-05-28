@@ -1,50 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#423752">
+    android:background="#FFF5EE">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="新建任务"
+        android:textColor="@color/design_default_color_primary_dark"
+        android:textColorLink="@color/design_default_color_primary"
+        android:textSize="24dp" />
 
     <EditText
         android:id="@+id/item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="主题：" />
+        android:hint="主题："
+        android:textSize="20sp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/item"
+        android:hint="内容"
+        android:textSize="20sp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"/>
 
     <EditText
         android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="内容:" />
+        android:layout_height="200dp"
+        android:layout_below="@+id/textView3"
+         android:background="@drawable/editbackground" />
 
     <TextView
         android:id="@+id/data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="时间" />
+        android:layout_below="@+id/content"
+        android:layout_marginTop="20dp"
+        android:text="时间"
+        android:textSize="20sp" />
 
-    <Spinner
-        android:id="@+id/spinner"
+    <LinearLayout
+        android:id="@+id/location"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/data"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="重要性"/>
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
     <RadioGroup
         android:id="@+id/clock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
+        android:layout_below="@+id/location"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
             android:text="不需要提醒" />
 
         <RadioButton
             android:id="@+id/yes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
             android:text="自定义提醒" />
     </RadioGroup>
 
@@ -52,6 +97,9 @@
         android:id="@+id/clocktext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/clock"
+        android:textSize="20sp"
+        android:layout_marginTop="5dp"
         android:text="提醒时间" />
 
 
@@ -59,6 +107,19 @@
         android:id="@+id/save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/clocktext"
+        android:textSize="20sp"
+        android:layout_marginTop="15dp"
         android:text="保存" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/num"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/save" />
+
+
+
+</RelativeLayout>
