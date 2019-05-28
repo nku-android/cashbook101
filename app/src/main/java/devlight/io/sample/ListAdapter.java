@@ -81,6 +81,8 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
             viewHolder.text = (TextView) convertView.findViewById(R.id.list_item_text);
             viewHolder.time = (TextView) convertView.findViewById(R.id.list_item_time);
             viewHolder.btn = (ImageButton) convertView.findViewById(R.id.list_item_btn);
+            viewHolder.delete = (ImageButton) convertView.findViewById(R.id.delete_btn);
+
 
 
             // 将内部类对象存储到View对象中
@@ -107,6 +109,7 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
 
         if (data.type == 0) {
             viewHolder.btn = null;
+            viewHolder.delete = null;
             convertView.setBackgroundColor(Color.parseColor("#ddeef8"));
             viewHolder.text.setBackgroundColor(Color.parseColor("#ddeef8"));
             viewHolder.time.setBackgroundColor(Color.parseColor("#ddeef8"));
@@ -116,12 +119,19 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
             viewHolder.btn.setImageResource(R.drawable.select_button_on);
             viewHolder.btn.setTag(position);
             viewHolder.btn.setOnClickListener(this);
+            viewHolder.delete.setImageResource(R.drawable.ic_delete);
+            viewHolder.delete.setTag(position);
+            viewHolder.delete.setOnClickListener(this);
             viewHolder.time.setText(data.time);
+
         }
         if (data.type == 2) {
             viewHolder.btn.setImageResource(R.drawable.select_button_off);
             viewHolder.btn.setTag(position);
             viewHolder.btn.setOnClickListener(this);
+            viewHolder.delete.setImageResource(R.drawable.ic_delete);
+            viewHolder.delete.setTag(position);
+            viewHolder.delete.setOnClickListener(this);
             viewHolder.time.setText(data.time);
         }
 
@@ -147,6 +157,7 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
 
     public final static class ViewHolder {
         ImageButton btn;
+        ImageButton delete;
         TextView text;
         TextView time;
     }

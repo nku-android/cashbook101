@@ -3,12 +3,18 @@ package devlight.io.sample;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.MacAddress;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,6 +39,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import devlight.io.sample.components.MySQLiteOpenHelper;
+
+import static android.content.ContentValues.TAG;
+import static java.security.AccessController.getContext;
+
 public class addtask extends Activity {
     private Spinner spinner;
     private List<String> data_list;
@@ -55,6 +66,11 @@ public class addtask extends Activity {
     private List<String> options1Items = new ArrayList<>();
     private List<String> hourItems = new ArrayList<>();
     private List<String> minItems = new ArrayList<>();
+
+    private MySQLiteOpenHelper dbHelper;
+
+    String str;
+
    // private OptionsPickerView pvOptions;
 
     @Override
@@ -73,7 +89,8 @@ public class addtask extends Activity {
 //            }
 //        });
 
-
+        item=(EditText)findViewById(R.id.item);
+        content=(EditText)findViewById(R.id.content);
         spinner = (Spinner) findViewById(R.id.spinner);
         //数据
         data_list = new ArrayList<String>();
@@ -95,7 +112,7 @@ public class addtask extends Activity {
                                        int arg2, long arg3) {
                 // TODO Auto-generated method stub
                 // 将所选mySpinner 的值带入myTextView 中
-                String str = (String) spinner.getItemAtPosition(arg2);
+               str = (String) spinner.getItemAtPosition(arg2);
                // textview4.setText("您所在的城市是：" + str);//文本说明
             }
 
@@ -154,7 +171,11 @@ public class addtask extends Activity {
                 alterDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        displayDatabaseInfo();
                         Toast.makeText(addtask.this, "设置成功", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(addtask.this, HorizontalNtbActivity.class);
+                        intent.putExtra("id",1);
+                        startActivity(intent);
                     }
                 });
                 alterDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -235,7 +256,6 @@ public class addtask extends Activity {
                         + hourItems.get(options2)+"时"
                         + minItems.get(options3)+"分";
                 clocktext.setText("提醒时间为："+str);
-             //   Toast.makeText(addtask.this, str, Toast.LENGTH_SHORT).show();
             }
         })
                 .setOptionsSelectChangeListener(new OnOptionsSelectChangeListener() {
@@ -252,4 +272,26 @@ public class addtask extends Activity {
         pvNoLinkOptions.show();
 
     }
+
+    private void displayDatabaseInfo() {
+
+        dbHelper = MySQLiteOpenHelper.getInstance(addtask.this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("title",item.getText().toString());
+        cv.put("content",content.getText().toString());
+        cv.put("clock",clocktext.getText().toString());
+        cv.put("importance",str);
+        cv.put("alert_time",data.getText().toString());
+
+        db.insert("tb_todo",null,cv);
+
+        String sql = "SELECT * FROM tb_todo";
+        Cursor cursor = dbHelper.getWritableDatabase().rawQuery(sql, null);
+        TextView num=(TextView)findViewById(R.id.num);
+        num.setText("目前有:"+cursor.getCount()+"个任务");
+
+    }
+
 }

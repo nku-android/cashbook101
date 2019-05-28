@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -26,6 +27,8 @@ import java.util.List;
 
 import devlight.io.sample.components.MySQLiteOpenHelper;
 
+import static android.content.ContentValues.TAG;
+
 
 public class PageTodolist extends Fragment implements ListAdapter.InnerItemOnclickListener {
 
@@ -35,6 +38,9 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
     private ListAdapter listAdapter;
     private MySQLiteOpenHelper dbHelper;
     private int insertPosition = 1;
+    private boolean flag = false;
+
+
 
 
 
@@ -42,6 +48,8 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.page1_todolist, container, false);
         dbHelper = MySQLiteOpenHelper.getInstance(getContext());
+
+
 
         ListAdapter.itemHolder title_undo = new ListAdapter.itemHolder();
         title_undo.text = "主人~ 努力啊，还有这么多没完成呢~";
@@ -81,6 +89,7 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
         tile_done.type = 0;
         list.add(tile_done);
 
+        sql = "SELECT * FROM tb_todo";
 
         ListAdapter.itemHolder item_done;
         sql = "SELECT * FROM tb_todo WHERE is_done==1";
@@ -107,7 +116,6 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
 //            list.add(test4);
 //        }
 
-
         todoList = view.findViewById(R.id.todolist);
 
         FloatingActionButton addbutton;
@@ -125,6 +133,7 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
         });
 
 
+
         return view;
     }
 
@@ -133,6 +142,12 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
     public void itemClick(View v) {
         ImageButton btn = getView().findViewById(v.getId());
         int position = (int) v.getTag();
+
+        if(v.getId() == R.id.delete_btn){
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.delete("tb_todo","id= ?",new String[]{list.get(position).id+""});
+            flag = true;
+        }
 
         AnimatorSet animatorSet = getDeleteAnimation(position);
         animatorSet.start();
@@ -144,7 +159,7 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                remove(position);
+                remove(position,flag);
                 // 动画结束后，恢复ListView所有子View的属性
                 for (int i = 0; i < todoList.getChildCount(); ++i) {
                     View v = todoList.getChildAt(i);
@@ -207,30 +222,36 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
 
     }
 
-    private void remove(int position) {
+    private void remove(int position, boolean flag) {
         if (position < list.size()) {
-            if(list.get(position).type == 1){
-                ContentValues values = new ContentValues();
-                values.put("is_done",1);
-                dbHelper.getWritableDatabase().update("tb_todo",values,"id=?",new String[]{list.get(position).id+""});
-                insertPosition--;
-                ListAdapter.itemHolder change_item =  list.get(position);
+            if(flag){
                 list.remove(position);
-                change_item.type = 2;
-                list.add(change_item);
-
+                flag = false;
             }else{
-                ContentValues values = new ContentValues();
-                values.put("is_done",0);
-                dbHelper.getWritableDatabase().update("tb_todo",values,"id=?",new String[]{list.get(position).id+""});
-                ListAdapter.itemHolder change_item =  list.get(position);
-                list.remove(position);
-                change_item.type = 1;
-                list.add(insertPosition,change_item);
-                insertPosition++;
+                if(list.get(position).type == 1){
+                    ContentValues values = new ContentValues();
+                    values.put("is_done",1);
+                    dbHelper.getWritableDatabase().update("tb_todo",values,"id=?",new String[]{list.get(position).id+""});
+                    insertPosition--;
+                    ListAdapter.itemHolder change_item =  list.get(position);
+                    list.remove(position);
+                    change_item.type = 2;
+                    list.add(change_item);
+
+                }else{
+                    ContentValues values = new ContentValues();
+                    values.put("is_done",0);
+                    dbHelper.getWritableDatabase().update("tb_todo",values,"id=?",new String[]{list.get(position).id+""});
+                    ListAdapter.itemHolder change_item =  list.get(position);
+                    list.remove(position);
+                    change_item.type = 1;
+                    list.add(insertPosition,change_item);
+                    insertPosition++;
+                }
             }
 
         }
+
         listAdapter.notifyDataSetChanged();
     }
 
