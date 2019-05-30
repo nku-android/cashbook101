@@ -27,15 +27,14 @@ public class HorizontalNtbActivity extends FragmentActivity {
     private final String TAG = getClass().getName();
 
 
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_horizontal_ntb);
 
-        ViewPager viewPager = (ViewPager)findViewById(R.id.vp_horizontal_ntb);
-        String waitPayFlag = getIntent().getStringExtra("id") ;
-        if(!TextUtils.isEmpty(waitPayFlag)){
+        ViewPager viewPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
+        String waitPayFlag = getIntent().getStringExtra("id");
+        if (!TextUtils.isEmpty(waitPayFlag)) {
             if ("1".equals(waitPayFlag)) {
                 // 这里设置要跳转到第几个fragment
                 viewPager.setCurrentItem(1);
@@ -114,9 +113,8 @@ public class HorizontalNtbActivity extends FragmentActivity {
             @Override
             public void onPageSelected(final int position) {
                 navigationTabBar.getModels().get(position).hideBadge();
-                if (position == 1) {
-                    EventBus.getDefault().post(MessageEvent.UpdateTodo());
-                }
+                EventBus.getDefault().post(MessageEvent.UpdateTodo());
+
 
             }
 

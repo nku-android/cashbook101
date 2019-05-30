@@ -324,8 +324,9 @@ public class EditTask extends Activity {
         } else {
             id = (int) db.insert("tb_todo", null, cv);
         }
-        AlarmUtils.setAlarm(getApplicationContext(), id, clockTime, AlarmManager.RTC_WAKEUP);
-
+        if (clockTime != -1) {
+            AlarmUtils.setAlarm(getApplicationContext(), id, clockTime, AlarmManager.RTC_WAKEUP);
+        }
     }
 
 

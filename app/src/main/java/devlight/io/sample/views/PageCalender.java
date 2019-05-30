@@ -79,9 +79,7 @@ public class PageCalender extends Fragment {
 
             @Override
             public void onDayOfMonthSelected(int year, int month, int day) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(year, month, day, 0, 0, 0);
-                current_timestamp = calendar.getTimeInMillis();
+                current_timestamp = MyDateUtils.getDayTimestamp(year, month, day);
                 update_todo();
             }
 
@@ -164,7 +162,7 @@ public class PageCalender extends Fragment {
     }
 
     private ArrayList<ListAdapter.itemHolder> getOneDayTodo(long today_start) {
-        long today_end = today_start + 86400000;
+        long today_end = today_start + MyDateUtils.MillisInDay-1;
 
         String sql = "SELECT * FROM tb_todo where (alert_time >= ? AND alert_time < ?)";
 

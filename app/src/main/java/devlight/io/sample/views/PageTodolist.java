@@ -19,10 +19,15 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ListView;
 
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import devlight.io.sample.R;
+import devlight.io.sample.components.MessageEvent;
 import devlight.io.sample.components.TodoItem;
 import devlight.io.sample.components.ListAdapter;
 import devlight.io.sample.components.MySQLiteOpenHelper;
@@ -43,10 +48,21 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.page1_todolist, container, false);
         dbHelper = MySQLiteOpenHelper.getInstance(getContext());
+        todoList = view.findViewById(R.id.todolist);
+        update_todo();
 
+        FloatingActionButton addBtn = view.findViewById(R.id.add_btn);
+        addBtn.setOnClickListener(v -> {
+            getActivity().startActivity(new Intent(getActivity(), EditTask.class));
+        });
+
+
+        return view;
+    }
+
+    private void getAllTodos() {
         list = new ArrayList<>();
         insertPosition = 1;
-
 
         ListAdapter.itemHolder title_undo = new ListAdapter.itemHolder();
         title_undo.text = "主人~ 努力啊，还有这么多没完成呢~";
@@ -86,26 +102,7 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
             item_done = ListAdapter.itemHolder.fromContentValues(cv_done);
             list.add(item_done);
         }
-
-
-        todoList = view.findViewById(R.id.todolist);
-
-        FloatingActionButton addBtn = view.findViewById(R.id.add_btn);
-        listAdapter = new ListAdapter(getActivity(), R.layout.item_todolist, list, todoList);
-        listAdapter.setOnInnerItemOnClickListener(this);
-        todoList.setAdapter(listAdapter);
-
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().startActivity(new Intent(getActivity(), EditTask.class));
-            }
-        });
-
-
-        return view;
     }
-
 
     @Override
     public void itemClick(View v) {
@@ -235,5 +232,31 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
         listAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent messageEvent) {
+        if (MessageEvent.UPDATE_TODO.equals(messageEvent.message)) {
+            update_todo();
+        }
+    }
+
+    private void update_todo() {
+        getAllTodos();
+
+        listAdapter = new ListAdapter(getActivity(), R.layout.item_todolist, list, todoList);
+        listAdapter.setOnInnerItemOnClickListener(this);
+        todoList.setAdapter(listAdapter);
+    }
 }
 
