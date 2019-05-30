@@ -2,9 +2,9 @@ package devlight.io.sample;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
+import android.app.AlarmManager;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,6 +26,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import devlight.io.sample.components.CustomDayPickerView;
 import devlight.io.sample.components.MySQLiteOpenHelper;
 import me.nlmartian.silkcal.DatePickerController;
@@ -39,6 +40,11 @@ public class PageCalender extends Fragment {
 
     @BindView(R.id.testBtn)
     Button testBtn;
+
+    @OnClick(R.id.testBtn)
+    void test(View view) {
+        AlarmUtils.setAlarm(getContext(), "TIMER_ACTION", 1, System.currentTimeMillis() + 5000, AlarmManager.RTC_WAKEUP);
+    }
 
     @BindView(R.id.one_day_todo)
     ListView one_day_todo;

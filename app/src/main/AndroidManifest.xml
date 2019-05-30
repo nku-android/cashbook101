@@ -32,7 +32,7 @@
             android:exported="false" />
 
         <receiver
-            android:name=".AlarmReceiver"
+            android:name="devlight.io.sample.AlarmReceiver"
             android:permission="true">
             <intent-filter>
                 <action android:name="TIMER_ACTION_REPEATING" />
