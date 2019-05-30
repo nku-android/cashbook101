@@ -77,7 +77,6 @@ public class addtask extends Activity {
 
     String str;
 
-   // private OptionsPickerView pvOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
 
+import java.util.Date;
+
 public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
     @SuppressWarnings("FieldCanBeLocal")
@@ -37,6 +39,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE tb_todo (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "title Text not null," +
+                "alert_time INTEGER," +
                 "content Text,"+
                 "clock Long,"+
                 "importance String default '无', "+
@@ -44,12 +47,22 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
                 "is_done bool default 0" +
                 ");");
 
-        ContentValues cv = new ContentValues();
-        cv.put("title", "提醒1");
-        cv.put("is_done", true);
-        cv.put("importance","无");
-        cv.put("clock","不需要提醒");
-        cv.put("content"," ");
+        ContentValues cv1 = new ContentValues();
+        cv1.put("title", "提醒1");
+        cv1.put("is_done", true);
+        cv1.put("importance","无");
+        cv1.put("clock","不需要提醒");
+        cv1.put("content"," ");
+        cv1.put("alert_time", System.currentTimeMillis() + 3600);
+        db.insert("tb_todo", null, cv1);
+
+        ContentValues cv2 = new ContentValues();
+        cv2.put("title", "提醒2");
+        cv2.put("is_done", false);
+        cv2.put("importance","无");
+        cv2.put("clock","不需要提醒");
+        cv2.put("content"," ");
+        cv2.put("alert_time", System.currentTimeMillis());
         db.insert("tb_todo", null, cv);
     }
 

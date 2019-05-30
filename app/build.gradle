@@ -32,6 +32,7 @@ dependencies {
     implementation project(':navigationtabbar')
 
     implementation 'me.nlmartian.silkcal:library:0.1.1'
+    implementation 'org.greenrobot:eventbus:3.1.1'
 
 
 

@@ -31,27 +31,18 @@ import java.nio.file.Paths;
 
 
 public class PageLemon extends Fragment {
-//    waveview waveProgresView;
     private CountDownTimer mTimer;
-//    private TextView textView;
-//    private Button button;
     int t;
-//    TextView show;
     final String[] items = new String[]{"30分钟", "60分钟", "90分钟", "120分钟",};
-private waveview waveProgressView_0, waveProgressView_1, waveProgressView_2;
-Button start;
-TextView show;
-TextView time;
-//    @Override
+    private waveview waveProgressView_0, waveProgressView_1, waveProgressView_2;
+    private Button start;
+    private TextView time;
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.page3_lemon, container, false);
 
-
         waveProgressView_0 = (waveview) view.findViewById(R.id.wpv_0);
-        show=(TextView)view.findViewById(R.id.show);
         time=(TextView)view.findViewById(R.id.time);
-//        waveProgressView_1 = (waveview) view.findViewById(R.id.wpv_1);
-//        waveProgressView_2 = (waveview) view.findViewById(R.id.wpv_2);
         start=(Button)view.findViewById(R.id.start);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,53 +50,9 @@ TextView time;
                 start(v);
             }
         });
-//        waveProgressView_0.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-//            }
-//        });
-//        waveProgresView = (waveview) view.findViewById(R.id.wave_progress_view);
-//       button = (Button) view.findViewById(R.id.btn_test);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                waveProgresView.setProgress(100);
-//            }
-//        } );
-//
-//       textView = view.findViewById(R.id.time);
-//        show = view.findViewById(R.id.textView);
-//
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//
-//              //  waveProgresView.setProgress(0.5f);
-//                if (mTimer == null) {
-//
-//                    mTimer = new CountDownTimer((long) (t * 60 * 1000), 1000) {
-//                        @Override
-//                        public void onTick(long millisUntilFinished) {
-//                            // TODO Auto-generated method stub
-//                            textView.setText("还剩" + millisUntilFinished / (60 * 1000) + "分钟" + (millisUntilFinished % (60 * 1000)) / 1000 + "秒" + "  加油！坚持！");
-//
-//                        }
-//
-//                        @Override
-//                        public void onFinish() {
-//                            textView.setText("任务完成，很棒哦！");
-//                        }
-//                    }.start();
-//                }
-//            }
-//        });
-
             time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Log.i("dddd","ddgggg");
                 // TODO Auto-generated method stub
                 new AlertDialog.Builder(getActivity())
                         .setTitle("时长选择").setItems(items, new DialogInterface.OnClickListener() {
@@ -122,37 +69,29 @@ TextView time;
     }
 
     public void start(View view) {
-        ObjectAnimator objectAnimator0 = ObjectAnimator.ofFloat(waveProgressView_0, "progress", 0f, 100f);
-                if (mTimer == null) {
+        //ObjectAnimator objectAnimator0 = ObjectAnimator.ofFloat(waveProgressView_0, "progress", 0f, 100f);
+        if (mTimer == null) {
 
-                    mTimer = new CountDownTimer((long) (t * 60 * 1000), 1000) {
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-                            // TODO Auto-generated method stub
-                            show.setText("还剩" + millisUntilFinished / (60 * 1000) + "分钟" + (millisUntilFinished % (60 * 1000)) / 1000 + "秒" + "  加油！坚持！");
-
-                        }
-
-                        @Override
-                        public void onFinish() {
-                            show.setText("任务完成，很棒哦！");
-                        }
-                    }.start();
+            mTimer = new CountDownTimer((long) (t * 60 * 1000), 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    // TODO Auto-generated method stub
+                  time.setText("还剩" + millisUntilFinished / (60 * 1000) + "分钟" + (millisUntilFinished % (60 * 1000)) / 1000 + "秒");
+                  waveProgressView_0.setProgress((float)(Math.round(t*60*1000-millisUntilFinished)/(t*60.0*1000.0)*100));
                 }
 
-        objectAnimator0.setDuration(t*1000);
-        objectAnimator0.setInterpolator(new LinearInterpolator());
-        objectAnimator0.start();
+                @Override
+                public void onFinish() {
+                    time.setText("任务完成，很棒哦！");
+                }
+            }.start();
+        }
 
-//        ObjectAnimator objectAnimator1 = ObjectAnimator.ofFloat(waveProgressView_1, "progress", 0f, 100f);
-//        objectAnimator1.setDuration(3300);
-//        objectAnimator1.setInterpolator(new AccelerateInterpolator());
-//        objectAnimator1.start();
-//
-//        ObjectAnimator objectAnimator2 = ObjectAnimator.ofFloat(waveProgressView_2, "progress", 0f, 120f);
-//        objectAnimator2.setDuration(5000);
-//        objectAnimator2.setInterpolator(new BounceInterpolator());
-//        objectAnimator2.start();
+
+//        objectAnimator0.setDuration(t * 1000);
+//        objectAnimator0.setInterpolator(new LinearInterpolator());
+//        objectAnimator0.start();
+
     }
 }
 
