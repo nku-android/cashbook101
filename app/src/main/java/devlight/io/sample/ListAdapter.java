@@ -119,8 +119,8 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
 
 
         viewHolder.text.setText(data.text);
-        viewHolder.time.setTag(position);
-        viewHolder.time.setOnClickListener(this);
+        viewHolder.text.setTag(position);
+        viewHolder.text.setOnClickListener(this);
 
         if (data.type == 0) {
             viewHolder.btn = null;

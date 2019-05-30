@@ -38,10 +38,13 @@ import com.bigkoo.pickerview.listener.OnOptionsSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import devlight.io.sample.components.MySQLiteOpenHelper;
@@ -72,17 +75,37 @@ public class EditTask extends Activity {
     private List<String> options1Items = new ArrayList<>();
     private List<String> hourItems = new ArrayList<>();
     private List<String> minItems = new ArrayList<>();
-
     private MySQLiteOpenHelper dbHelper;
 
+    private ContentValues cv = new ContentValues();
+
     String str;
+    private int id;
 
     // private OptionsPickerView pvOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.addtask);
+        setContentView(R.layout.edit_task);
+
+        Intent intent = getIntent();
+        id = intent.getIntExtra("id",0);
+
+
+        dbHelper = MySQLiteOpenHelper.getInstance(EditTask.this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String sql = "SELECT * FROM tb_todo WHERE id==?";
+        Cursor cursor = dbHelper.getReadableDatabase().rawQuery(sql, new String[]{id+""});
+
+
+        while (cursor.moveToNext()) {
+            DatabaseUtils.cursorStringToContentValues(cursor, "title", cv);
+            DatabaseUtils.cursorStringToContentValues(cursor, "alert_time", cv);
+            DatabaseUtils.cursorStringToContentValues(cursor, "content", cv);
+            DatabaseUtils.cursorStringToContentValues(cursor, "clock", cv);
+            DatabaseUtils.cursorStringToContentValues(cursor, "importance", cv);
+        }
 
 
 
@@ -102,6 +125,16 @@ public class EditTask extends Activity {
         arr_adapter= new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, data_list);
         //加载适配器
         spinner.setAdapter(arr_adapter);
+
+        int position = 0;
+        String data_list_select = cv.getAsString("importance");
+        switch (data_list_select){
+            case "高": spinner.setSelection(1);break;
+            case "中": spinner.setSelection(2); break;
+            case "低": spinner.setSelection(3); break;
+            default: spinner.setSelection(0);
+        }
+
 
         spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {//选择item的选择点击监听事件
             public void onItemSelected(AdapterView<?> arg0, View arg1,
@@ -123,6 +156,8 @@ public class EditTask extends Activity {
                 showDialog(DATE_DIALOG);
             }
         });
+
+
         final Calendar ca = Calendar.getInstance();
         mYear = ca.get(Calendar.YEAR);
         mMonth = ca.get(Calendar.MONTH);
@@ -134,13 +169,31 @@ public class EditTask extends Activity {
         no=(RadioButton)findViewById(R.id.no);
         clocktext=(TextView)findViewById(R.id.clocktext);
 
+
+
+        item.setText(cv.getAsString("title"));
+        content.setText(cv.getAsString("content"));
+        String time = cv.getAsString("alert_time");;
+        time_data.setText("时间:"+time.substring(0,4)+"-"+time.substring(4,6)+"-"+time.substring(6));
+
+//        clocktext.setText("提醒时间:"+cv.getAsString("clock"));
+
+
+        if(cv.getAsString("clock").contains("不")){
+            no.setChecked(true);
+            clocktext.setText("提醒时间:不需要提醒");
+        }else {
+            clocktext.setText("提醒时间:"+cv.getAsString("clock"));
+            yes.setChecked(true);
+        }
+
         //给RadioGroup设置事件监听
         clock.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // TODO Auto-generated method stub
                 if(checkedId==no.getId()){
-                    clocktext.setText("提醒时间：不需要提醒");
+                    clocktext.setText("提醒时间:不需要提醒");
                 }else if(checkedId==yes.getId()){
                     yes.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -166,7 +219,6 @@ public class EditTask extends Activity {
                         displayDatabaseInfo();
                         Toast.makeText(EditTask.this, "设置成功", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(EditTask.this, HorizontalNtbActivity.class);
-                        intent.putExtra("id",1);
                         startActivity(intent);
                     }
                 });
@@ -195,7 +247,8 @@ public class EditTask extends Activity {
      * 设置日期 利用StringBuffer追加
      */
     public void display() {
-        time_data.setText(new StringBuffer().append("时间: ").append(mYear).append("-").append(mMonth+1).append("-").append(mDay).append(" "));
+        String time = mYear+"-"+(mMonth+1)+"-"+mDay;
+        time_data.setText("时间:"+time);
     }
 
     private DatePickerDialog.OnDateSetListener mdateListener = new DatePickerDialog.OnDateSetListener() {
@@ -239,7 +292,7 @@ public class EditTask extends Activity {
                 String str =  options1Items.get(options1)+"的"
                         + hourItems.get(options2)+"时"
                         + minItems.get(options3)+"分";
-                clocktext.setText("提醒时间为："+str);
+                clocktext.setText("提醒时间:"+str);
             }
         })
                 .setOptionsSelectChangeListener(new OnOptionsSelectChangeListener() {
@@ -266,17 +319,14 @@ public class EditTask extends Activity {
 
         cv.put("title",item.getText().toString());
         cv.put("content",content.getText().toString());
-        cv.put("clock",clocktext.getText().toString());
+        String tmp = clocktext.getText().toString();
+        cv.put("clock",tmp.substring(tmp.indexOf(':')+1));
         cv.put("importance",str);
-        String tmp = time_data.getText().toString();
-        cv.put("alert_time",tmp.substring(tmp.indexOf(':')+1));
+        int tmp1 = mYear*10000+(mMonth+1)*100+mDay;
+        cv.put("alert_time",tmp1);
 
-        db.insert("tb_todo",null,cv);
+        db.update("tb_todo",cv,"id=?",new String[]{id+""});
 
-        String sql = "SELECT * FROM tb_todo";
-        Cursor cursor = dbHelper.getWritableDatabase().rawQuery(sql, null);
-        TextView num=(TextView)findViewById(R.id.num);
-        num.setText("目前有:"+cursor.getCount()+"个任务");
 
     }
 
