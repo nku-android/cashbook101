@@ -35,11 +35,11 @@ import static android.content.ContentValues.TAG;
 public class PageTodolist extends Fragment implements ListAdapter.InnerItemOnclickListener {
 
 
-    private List<ListAdapter.itemHolder> list = new ArrayList<ListAdapter.itemHolder>();
+    private List<ListAdapter.itemHolder> list;
     private ListView todoList;
     private ListAdapter listAdapter;
     private MySQLiteOpenHelper dbHelper;
-    private int insertPosition = 1;
+    private int insertPosition;
     private boolean flag = false;
 
 
@@ -50,6 +50,8 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
         View view = inflater.inflate(R.layout.page1_todolist, container, false);
         dbHelper = MySQLiteOpenHelper.getInstance(getContext());
 
+        list = new ArrayList<ListAdapter.itemHolder>();
+        insertPosition = 1;
 
 
         ListAdapter.itemHolder title_undo = new ListAdapter.itemHolder();
@@ -64,8 +66,11 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
         while (cursor.moveToNext()) {
             item_undo = new ListAdapter.itemHolder();
             DatabaseUtils.cursorStringToContentValues(cursor, "title", cv_undo);
+            DatabaseUtils.cursorStringToContentValues(cursor, "alert_time", cv_undo);
+            DatabaseUtils.cursorIntToContentValues(cursor,"id",cv_undo);
             DatabaseUtils.cursorLongToContentValues(cursor, "alert_time", cv_undo);
             DatabaseUtils.cursorIntToContentValues(cursor, "id", cv_undo);
+
             item_undo.text = cv_undo.getAsString("title");
             item_undo.time = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(cv_undo.getAsLong("alert_time"));
             item_undo.type = 1;
@@ -75,14 +80,6 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
         }
 
 
-//        for (int i = 0; i < 10; i++) {
-//            test2 = new ListAdapter.itemHolder();
-//            test2.text = "todolist" + i;
-//            test2.time = i + ":00 pm";
-//            test2.btn = R.drawable.ic_button_off;
-//            test2.type = 1;
-//            list.add(test2);
-//        }
 
         ListAdapter.itemHolder tile_done = new ListAdapter.itemHolder();
         tile_done.text = "哇哦~超级棒!";
@@ -106,15 +103,7 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
             item_done.id = cv_done.getAsInteger("id");
             list.add(item_done);
         }
-//
-//        for (int i = 0; i < 10; i++) {
-//            test4 = new ListAdapter.itemHolder();
-//            test4.text = "alreadydolist" + i;
-//            test4.time = i + ":00 pm";
-//            test4.btn = R.drawable.ic_button_on;
-//            test4.type = 2;
-//            list.add(test4);
-//        }
+
 
         todoList = view.findViewById(R.id.todolist);
 
@@ -128,7 +117,6 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
             @Override
             public void onClick(View v) {
                 getActivity().startActivity(new Intent(getActivity(), addtask.class));
-
             }
         });
 
@@ -143,11 +131,26 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
         ImageButton btn = getView().findViewById(v.getId());
         int position = (int) v.getTag();
 
+        if(v.getId() == R.id.list_item_text || v.getId() == R.id.list_item_time){
 
-        if(v.getId() == R.id.delete_btn){
             SQLiteDatabase db = dbHelper.getWritableDatabase();
-            db.delete("tb_todo","id= ?",new String[]{list.get(position).id+""});
-            flag = true;
+            String sql = "SELECT * FROM tb_todo WHERE id==?";
+            Cursor cursor = dbHelper.getWritableDatabase().rawQuery(sql, new String[]{list.get(position)+""});
+            ContentValues cv = new ContentValues();
+            DatabaseUtils.cursorStringToContentValues(cursor, "title", cv);
+            DatabaseUtils.cursorStringToContentValues(cursor, "alert_time", cv);
+            DatabaseUtils.cursorStringToContentValues(cursor,"content",cv);
+            DatabaseUtils.cursorStringToContentValues(cursor,"clock",cv);
+            DatabaseUtils.cursorStringToContentValues(cursor,"important",cv);
+
+        }else{
+
+            if (v.getId() == R.id.delete_btn){
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                db.delete("tb_todo","id= ?",new String[]{list.get(position).id+""});
+                flag = true;
+            }
+
         }
         AnimatorSet animatorSet = Animations.DeleteAnimation(todoList, position);
 
@@ -180,6 +183,8 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
 
             }
         });
+
+
     }
 
 

@@ -98,7 +98,6 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
             viewHolder.delete = (ImageButton) convertView.findViewById(R.id.delete_btn);
 
 
-
             // 将内部类对象存储到View对象中
             convertView.setTag(viewHolder);
 
@@ -120,6 +119,8 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
 
 
         viewHolder.text.setText(data.text);
+        viewHolder.time.setTag(position);
+        viewHolder.time.setOnClickListener(this);
 
         if (data.type == 0) {
             viewHolder.btn = null;
@@ -137,6 +138,8 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
             viewHolder.delete.setTag(position);
             viewHolder.delete.setOnClickListener(this);
             viewHolder.time.setText(data.time);
+            viewHolder.time.setTag(position);
+            viewHolder.time.setOnClickListener(this);
 
         }
         if (data.type == 2) {
@@ -147,6 +150,8 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
             viewHolder.delete.setTag(position);
             viewHolder.delete.setOnClickListener(this);
             viewHolder.time.setText(data.time);
+            viewHolder.time.setTag(position);
+            viewHolder.time.setOnClickListener(this);
         }
 
 

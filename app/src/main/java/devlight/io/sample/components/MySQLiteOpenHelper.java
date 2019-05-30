@@ -43,6 +43,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
                 "content Text,"+
                 "clock Text,"+
                 "importance INTEGER default 0,"+
+                "alert_time Text," +
                 "is_done bool default 0" +
                 ");");
 
@@ -60,7 +61,8 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("drop table if exists tb_todo");
+        onCreate(db);
     }
 
 }

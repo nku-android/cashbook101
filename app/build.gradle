@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "devlight.io.navigationtabbar"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -21,6 +21,10 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+
+    aaptOptions {
+        cruncherEnabled = false
+    }
 }
 
 dependencies {
@@ -29,6 +33,7 @@ dependencies {
 
     implementation 'me.nlmartian.silkcal:library:0.1.1'
     implementation 'org.greenrobot:eventbus:3.1.1'
+
 
 
     implementation 'com.android.support:support-v4:28.0.0'
@@ -41,6 +46,7 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.github.jorgecastilloprz:fillableloaders:1.01@aar'
+    implementation 'com.github.yhongm:WaveProgressView:master'
 
 }
 
