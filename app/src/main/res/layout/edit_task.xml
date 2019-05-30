@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="New Task"
+        android:text="Task"
         android:textStyle="bold"
         android:textColor="@color/design_default_color_primary_dark"
         android:textSize="28sp"
@@ -100,7 +100,7 @@
         <Spinner
             android:id="@+id/spinner"
             android:layout_marginLeft="10dp"
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="match_parent" />
 
     </LinearLayout>

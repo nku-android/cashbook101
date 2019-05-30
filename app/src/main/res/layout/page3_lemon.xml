@@ -1,71 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:orientation="vertical"-->
-    <!--android:weightSum="4">-->
-
-    <!--&lt;!&ndash;<TextView&ndash;&gt;-->
-        <!--&lt;!&ndash;android:id="@+id/time"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_below="@+id/button"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_marginTop="25dp"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:gravity="center"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:textSize="28sp"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:textColor="@color/colorPrimaryDark"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:text="LemonTime" />&ndash;&gt;-->
-
-    <!--&lt;!&ndash;<Button&ndash;&gt;-->
-        <!--&lt;!&ndash;android:id="@+id/button"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_below="@+id/textView"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_centerHorizontal="true"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_marginTop="300dp"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:gravity="center_horizontal"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:textColor="@color/colorPrimaryDark"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:background="#00000000"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:textSize="20sp"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:text="开始学习" />&ndash;&gt;-->
-
-    <!--&lt;!&ndash;<TextView&ndash;&gt;-->
-        <!--&lt;!&ndash;android:id="@+id/textView"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_centerInParent="false"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_centerHorizontal="true"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_gravity="center_horizontal"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_marginTop="90dp"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:text="请设置不能玩手机的时长，我会监督你哦~"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:textColor="@color/colorPrimaryDark"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:textSize="20sp" />&ndash;&gt;-->
-
-
-<!--</LinearLayout>-->
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/lemon_page"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:wpv="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="100dp"
-    android:paddingEnd="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingStart="16dp">
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:background="@drawable/background"
+    tools:context=".PageLemon">
 
-    <com.github.jorgecastillo.FillableLoader
-        android:id="@+id/fillableLoader"
-        android:layout_width="611dp"
-        android:layout_height="800dp"
-        app:fl_fillColor="#EF5350"
-        app:fl_originalWidth="1024"
-        app:fl_originalHeight="1024"
-        app:fl_clippingTransform="waves"
-        app:fl_fillDuration="5000"
-        android:layout_gravity="center"
-        />
+    <RelativeLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:layout_marginLeft="130dp"
+            android:gravity="center"
+            android:text="请设置学习时间"
+            android:textColor="@color/design_default_color_primary_dark"
+            android:textSize="30dp" />
 
+        <devlight.io.sample.waveview
+            android:id="@+id/wpv_0"
+            android:layout_width="95dp"
+            android:layout_height="87dp"
+            android:layout_below="@+id/time"
+            android:layout_marginLeft="11dp"
+            android:layout_marginTop="-60dp"
+            android:foregroundGravity="center"
+            android:padding="10dp"
+            wpv:progress="0" />
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top"
+        android:layout_marginTop="425dp"
+        android:gravity="center"
+        android:text="开启你的柠檬树时间"
+        android:textSize="23dp" />
 
 </RelativeLayout>

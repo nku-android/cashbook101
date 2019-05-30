@@ -39,28 +39,36 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE tb_todo (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "title Text not null," +
-                "alert_time INTEGER," +
                 "content Text,"+
-                "clock Text,"+
-                "importance INTEGER default 0,"+
+                "clock Long,"+
+                "importance String default '无', "+
+                "alert_time Long," +
                 "is_done bool default 0" +
                 ");");
 
-        ContentValues cv = new ContentValues();
-        cv.put("title", "提醒1");
-        cv.put("is_done", true);
-        cv.put("alert_time", System.currentTimeMillis() + 3600);
-        db.insert("tb_todo", null, cv);
+        ContentValues cv1 = new ContentValues();
+        cv1.put("title", "提醒1");
+        cv1.put("is_done", true);
+        cv1.put("importance","无");
+        cv1.put("clock","不需要提醒");
+        cv1.put("content"," ");
+        cv1.put("alert_time", 20190530);
+        db.insert("tb_todo", null, cv1);
 
-        cv.put("title", "提醒2");
-        cv.put("is_done", false);
-        cv.put("alert_time", System.currentTimeMillis());
-        db.insert("tb_todo", null, cv);
+        ContentValues cv2 = new ContentValues();
+        cv2.put("title", "提醒2");
+        cv2.put("is_done", false);
+        cv2.put("importance","无");
+        cv2.put("clock","不需要提醒");
+        cv2.put("content"," ");
+        cv2.put("alert_time", 20170920);
+        db.insert("tb_todo", null, cv2);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("drop table if exists tb_todo");
+        onCreate(db);
     }
 
 }
