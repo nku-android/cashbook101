@@ -30,6 +30,15 @@
             android:authorities="devlight.io.sample.db_provider"
             android:enabled="true"
             android:exported="false" />
+
+        <receiver
+            android:name=".AlarmReceiver"
+            android:permission="true">
+            <intent-filter>
+                <action android:name="TIMER_ACTION_REPEATING" />
+                <action android:name="TIMER_ACTION" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

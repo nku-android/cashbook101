@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,6 +36,9 @@ public class PageCalender extends Fragment {
     private MySQLiteOpenHelper dbHelper = MySQLiteOpenHelper.getInstance(getContext());
     private ListAdapter mListAdapter;
     private long current_timestamp;
+
+    @BindView(R.id.testBtn)
+    Button testBtn;
 
     @BindView(R.id.one_day_todo)
     ListView one_day_todo;
