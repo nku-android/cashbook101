@@ -24,6 +24,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize" />
 
         <activity android:name=".addtask" />
+        <activity android:name=".EditTask"/>
 
         <provider
             android:name=".components.DbContentProvider"

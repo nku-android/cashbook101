@@ -107,7 +107,7 @@ public class addtask extends Activity {
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
                 // TODO Auto-generated method stub
-                str = (String) spinner.getItemAtPosition(arg2);
+                str = (String) spinner.getSelectedItem();
             }
 
             @Override

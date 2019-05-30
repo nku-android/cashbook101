@@ -126,15 +126,10 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
         int position = (int) v.getTag();
 
         if(v.getId() == R.id.list_item_text || v.getId() == R.id.list_item_time){
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-            String sql = "SELECT * FROM tb_todo WHERE id==?";
-            Cursor cursor = dbHelper.getWritableDatabase().rawQuery(sql, new String[]{list.get(position)+""});
-            ContentValues cv = new ContentValues();
-            DatabaseUtils.cursorStringToContentValues(cursor, "title", cv);
-            DatabaseUtils.cursorStringToContentValues(cursor, "alert_time", cv);
-            DatabaseUtils.cursorStringToContentValues(cursor,"content",cv);
-            DatabaseUtils.cursorStringToContentValues(cursor,"clock",cv);
-            DatabaseUtils.cursorStringToContentValues(cursor,"important",cv);
+            int id = list.get(position).id;
+            Intent intent = new Intent(getActivity(),EditTask.class);
+            intent.putExtra("id",id);
+            startActivity(intent);
 
         }else{
 
@@ -144,39 +139,39 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
                 flag = true;
             }
 
-        }
+            AnimatorSet animatorSet = getDeleteAnimation(position);
+            animatorSet.start();
+            animatorSet.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
 
-        AnimatorSet animatorSet = getDeleteAnimation(position);
-        animatorSet.start();
-        animatorSet.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                remove(position,flag);
-                // 动画结束后，恢复ListView所有子View的属性
-                for (int i = 0; i < todoList.getChildCount(); ++i) {
-                    View v = todoList.getChildAt(i);
-                    v.setAlpha(1f);
-                    v.setTranslationY(0);
-                    v.setTranslationX(0);
                 }
-            }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    remove(position,flag);
+                    // 动画结束后，恢复ListView所有子View的属性
+                    for (int i = 0; i < todoList.getChildCount(); ++i) {
+                        View v = todoList.getChildAt(i);
+                        v.setAlpha(1f);
+                        v.setTranslationY(0);
+                        v.setTranslationX(0);
+                    }
+                }
 
-            }
+                @Override
+                public void onAnimationCancel(Animator animation) {
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
+                }
 
-            }
-        });
+                @Override
+                public void onAnimationRepeat(Animator animation) {
 
+                }
+            });
+
+
+        }
 
     }
 

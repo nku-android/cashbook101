@@ -38,15 +38,18 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "title Text not null," +
                 "content Text,"+
-                "clock Text,"+
-                "importance INTEGER default 0,"+
-                "alert_time Text," +
+                "clock Long,"+
+                "importance String default '无', "+
+                "alert_time Long," +
                 "is_done bool default 0" +
                 ");");
 
         ContentValues cv = new ContentValues();
         cv.put("title", "提醒1");
         cv.put("is_done", true);
+        cv.put("importance","无");
+        cv.put("clock","不需要提醒");
+        cv.put("content"," ");
         db.insert("tb_todo", null, cv);
     }
 
