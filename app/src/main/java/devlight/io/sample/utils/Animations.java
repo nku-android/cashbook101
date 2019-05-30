@@ -1,4 +1,4 @@
-package devlight.io.sample;
+package devlight.io.sample.utils;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;

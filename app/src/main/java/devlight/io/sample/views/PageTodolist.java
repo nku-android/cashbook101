@@ -1,4 +1,4 @@
-package devlight.io.sample;
+package devlight.io.sample.views;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -12,24 +12,20 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ListView;
 
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
+import devlight.io.sample.R;
+import devlight.io.sample.components.TodoItem;
+import devlight.io.sample.components.ListAdapter;
 import devlight.io.sample.components.MySQLiteOpenHelper;
-
-import static android.content.ContentValues.TAG;
 
 
 public class PageTodolist extends Fragment implements ListAdapter.InnerItemOnclickListener {
@@ -43,14 +39,12 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
     private boolean flag = false;
 
 
-
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.page1_todolist, container, false);
         dbHelper = MySQLiteOpenHelper.getInstance(getContext());
 
-        list = new ArrayList<ListAdapter.itemHolder>();
+        list = new ArrayList<>();
         insertPosition = 1;
 
 
@@ -64,23 +58,15 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
         Cursor cursor = dbHelper.getWritableDatabase().rawQuery(sql, null);
         ContentValues cv_undo = new ContentValues();
         while (cursor.moveToNext()) {
-            item_undo = new ListAdapter.itemHolder();
-            DatabaseUtils.cursorStringToContentValues(cursor, "title", cv_undo);
-            DatabaseUtils.cursorStringToContentValues(cursor, "alert_time", cv_undo);
-            DatabaseUtils.cursorIntToContentValues(cursor,"id",cv_undo);
-            DatabaseUtils.cursorLongToContentValues(cursor, "alert_time", cv_undo);
-            DatabaseUtils.cursorIntToContentValues(cursor, "id", cv_undo);
+            DatabaseUtils.cursorIntToContentValues(cursor, TodoItem.ID, cv_undo);
+            DatabaseUtils.cursorIntToContentValues(cursor, TodoItem.IS_DONE, cv_undo);
+            DatabaseUtils.cursorStringToContentValues(cursor, TodoItem.TITLE, cv_undo);
+            DatabaseUtils.cursorLongToContentValues(cursor, TodoItem.ALERT_TIME, cv_undo);
 
-            item_undo.text = cv_undo.getAsString("title");
-            item_undo.time = cv_undo.getAsString("alert_time");
-            String time = cv_undo.getAsString("alert_time");;
-            item_undo.time = time.substring(0,4)+"-"+time.substring(4,6)+"-"+time.substring(6);
-            item_undo.type = 1;
-            item_undo.id = cv_undo.getAsInteger("id");
+            item_undo = ListAdapter.itemHolder.fromContentValues(cv_undo);
             list.add(item_undo);
             insertPosition++;
         }
-
 
 
         ListAdapter.itemHolder tile_done = new ListAdapter.itemHolder();
@@ -88,41 +74,33 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
         tile_done.type = 0;
         list.add(tile_done);
 
-        sql = "SELECT * FROM tb_todo";
-
         ListAdapter.itemHolder item_done;
         sql = "SELECT * FROM tb_todo WHERE is_done==1";
         cursor = dbHelper.getWritableDatabase().rawQuery(sql, null);
         ContentValues cv_done = new ContentValues();
         while (cursor.moveToNext()) {
-            item_done = new ListAdapter.itemHolder();
-            DatabaseUtils.cursorStringToContentValues(cursor, "title", cv_done);
-            DatabaseUtils.cursorLongToContentValues(cursor, "alert_time", cv_done);
-            DatabaseUtils.cursorIntToContentValues(cursor, "id", cv_done);
-            item_done.text = cv_done.getAsString("title");
-            String time = cv_done.getAsString("alert_time");;
-            item_done.time = time.substring(0,4)+"-"+time.substring(4,6)+"-"+time.substring(6);
-            item_done.type = 2;
-            item_done.id = cv_done.getAsInteger("id");
+            DatabaseUtils.cursorIntToContentValues(cursor, TodoItem.ID, cv_done);
+            DatabaseUtils.cursorStringToContentValues(cursor, TodoItem.TITLE, cv_done);
+            DatabaseUtils.cursorLongToContentValues(cursor, TodoItem.ALERT_TIME, cv_done);
+            DatabaseUtils.cursorIntToContentValues(cursor, TodoItem.IS_DONE, cv_done);
+            item_done = ListAdapter.itemHolder.fromContentValues(cv_done);
             list.add(item_done);
         }
 
 
         todoList = view.findViewById(R.id.todolist);
 
-        FloatingActionButton addbutton;
-        addbutton = view.findViewById(R.id.add_btn);
+        FloatingActionButton addBtn = view.findViewById(R.id.add_btn);
         listAdapter = new ListAdapter(getActivity(), R.layout.item_todolist, list, todoList);
         listAdapter.setOnInnerItemOnClickListener(this);
         todoList.setAdapter(listAdapter);
 
-        addbutton.setOnClickListener(new View.OnClickListener() {
+        addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().startActivity(new Intent(getActivity(), addtask.class));
+                getActivity().startActivity(new Intent(getActivity(), EditTask.class));
             }
         });
-
 
 
         return view;
@@ -133,17 +111,17 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
     public void itemClick(View v) {
         int position = (int) v.getTag();
 
-        if(v.getId() == R.id.list_item_text || v.getId() == R.id.list_item_time){
+        if (v.getId() == R.id.list_item_text || v.getId() == R.id.list_item_time) {
             int id = list.get(position).id;
-            Intent intent = new Intent(getActivity(),EditTask.class);
-            intent.putExtra("id",id);
+            Intent intent = new Intent(getActivity(), EditTask.class);
+            intent.putExtra("id", id);
             startActivity(intent);
 
-        }else{
+        } else {
 
-            if (v.getId() == R.id.delete_btn){
+            if (v.getId() == R.id.delete_btn) {
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
-                db.delete("tb_todo","id= ?",new String[]{list.get(position).id+""});
+                db.delete("tb_todo", "id= ?", new String[]{list.get(position).id + ""});
                 flag = true;
             }
 
@@ -157,7 +135,7 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    remove(position,flag);
+                    remove(position, flag);
                     // 动画结束后，恢复ListView所有子View的属性
                     for (int i = 0; i < todoList.getChildCount(); ++i) {
                         View v = todoList.getChildAt(i);
@@ -226,28 +204,28 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
 
     private void remove(int position, boolean flag) {
         if (position < list.size()) {
-            if(flag){
+            if (flag) {
                 list.remove(position);
                 flag = false;
-            }else{
-                if(list.get(position).type == 1){
+            } else {
+                if (list.get(position).type == 1) {
                     ContentValues values = new ContentValues();
-                    values.put("is_done",1);
-                    dbHelper.getWritableDatabase().update("tb_todo",values,"id=?",new String[]{list.get(position).id+""});
+                    values.put("is_done", 1);
+                    dbHelper.getWritableDatabase().update("tb_todo", values, "id=?", new String[]{list.get(position).id + ""});
                     insertPosition--;
-                    ListAdapter.itemHolder change_item =  list.get(position);
+                    ListAdapter.itemHolder change_item = list.get(position);
                     list.remove(position);
                     change_item.type = 2;
                     list.add(change_item);
 
-                }else{
+                } else {
                     ContentValues values = new ContentValues();
-                    values.put("is_done",0);
-                    dbHelper.getWritableDatabase().update("tb_todo",values,"id=?",new String[]{list.get(position).id+""});
-                    ListAdapter.itemHolder change_item =  list.get(position);
+                    values.put("is_done", 0);
+                    dbHelper.getWritableDatabase().update("tb_todo", values, "id=?", new String[]{list.get(position).id + ""});
+                    ListAdapter.itemHolder change_item = list.get(position);
                     list.remove(position);
                     change_item.type = 1;
-                    list.add(insertPosition,change_item);
+                    list.add(insertPosition, change_item);
                     insertPosition++;
                 }
             }

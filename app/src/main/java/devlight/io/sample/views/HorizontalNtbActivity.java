@@ -1,4 +1,4 @@
-package devlight.io.sample;
+package devlight.io.sample.views;
 
 
 import android.graphics.Color;
@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -18,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import devlight.io.library.ntb.NavigationTabBar;
+import devlight.io.sample.components.MessageEvent;
+import devlight.io.sample.R;
 
 
 public class HorizontalNtbActivity extends FragmentActivity {
@@ -108,7 +109,6 @@ public class HorizontalNtbActivity extends FragmentActivity {
         navigationTabBar.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
-                Log.i(TAG, String.format("onPageScrolled %d, %f, %d", position, positionOffset, positionOffsetPixels));
             }
 
             @Override
@@ -123,7 +123,6 @@ public class HorizontalNtbActivity extends FragmentActivity {
             @Override
             public void onPageScrollStateChanged(final int state) {
 
-                Log.i(TAG, String.format("onPageScrollStateChanged: state: %d", state));
             }
         });
 

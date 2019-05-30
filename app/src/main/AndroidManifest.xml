@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".views.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,11 +20,11 @@
         </activity>
 
         <activity
-            android:name=".HorizontalNtbActivity"
+            android:name=".views.HorizontalNtbActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
 
-        <activity android:name=".addtask" />
-        <activity android:name=".EditTask"/>
+        <activity android:name=".views.AddTaskActivity" />
+        <activity android:name=".views.EditTask"/>
 
         <provider
             android:name=".components.DbContentProvider"
@@ -33,7 +33,7 @@
             android:exported="false" />
 
         <receiver
-            android:name="devlight.io.sample.AlarmReceiver"
+            android:name="devlight.io.sample.components.AlarmReceiver"
             android:permission="true">
             <intent-filter>
                 <action android:name="TIMER_ACTION_REPEATING" />

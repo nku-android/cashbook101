@@ -1,4 +1,4 @@
-package devlight.io.sample;
+package devlight.io.sample.components;
 
 public class MessageEvent {
     public static final String UPDATE_TODO = "update_todo";
