@@ -49,7 +49,7 @@ import devlight.io.sample.components.MySQLiteOpenHelper;
 import static android.content.ContentValues.TAG;
 import static java.security.AccessController.getContext;
 
-public class addtask extends Activity {
+public class EditTask extends Activity {
     private Spinner spinner;
     private List<String> data_list;
     private ArrayAdapter<String> arr_adapter;
@@ -77,7 +77,7 @@ public class addtask extends Activity {
 
     String str;
 
-   // private OptionsPickerView pvOptions;
+    // private OptionsPickerView pvOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +111,7 @@ public class addtask extends Activity {
             }
 
             @Override
-           public void onNothingSelected(AdapterView<?> parent) {
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
@@ -140,7 +140,7 @@ public class addtask extends Activity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // TODO Auto-generated method stub
                 if(checkedId==no.getId()){
-                   clocktext.setText("提醒时间：不需要提醒");
+                    clocktext.setText("提醒时间：不需要提醒");
                 }else if(checkedId==yes.getId()){
                     yes.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -156,7 +156,7 @@ public class addtask extends Activity {
 
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alterDialog = new AlertDialog.Builder(addtask.this);
+                AlertDialog.Builder alterDialog = new AlertDialog.Builder(EditTask.this);
                 alterDialog.setTitle("保存");
                 alterDialog.setMessage("是否设置该任务");
                 alterDialog.setCancelable(false);
@@ -164,8 +164,8 @@ public class addtask extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         displayDatabaseInfo();
-                        Toast.makeText(addtask.this, "设置成功", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(addtask.this, HorizontalNtbActivity.class);
+                        Toast.makeText(EditTask.this, "设置成功", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(EditTask.this, HorizontalNtbActivity.class);
                         intent.putExtra("id",1);
                         startActivity(intent);
                     }
@@ -173,7 +173,7 @@ public class addtask extends Activity {
                 alterDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(addtask.this, "取消", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditTask.this, "取消", Toast.LENGTH_SHORT).show();
                     }
                 });
                 alterDialog.show();
@@ -219,7 +219,7 @@ public class addtask extends Activity {
         options1Items.add("提前一周");
 
         for (int i = 0 ;i < 24 ; i ++){
-           hourItems.add(""+i);
+            hourItems.add(""+i);
         }
         for (int i = 0 ;i < 60 ; i ++){
             minItems.add(""+i);
@@ -246,7 +246,7 @@ public class addtask extends Activity {
                     @Override
                     public void onOptionsSelectChanged(int options1, int options2, int options3) {
                         String str = "options1: " + options1 + "\noptions2: " + options2 + "\noptions3: " + options3;
-                //        Toast.makeText(addtask.this, str, Toast.LENGTH_SHORT).show();
+                        //        Toast.makeText(addtask.this, str, Toast.LENGTH_SHORT).show();
                     }
                 })
                 // .setSelectOptions(0, 1, 1)
@@ -260,7 +260,7 @@ public class addtask extends Activity {
     private void displayDatabaseInfo() {
 
 
-        dbHelper = MySQLiteOpenHelper.getInstance(addtask.this);
+        dbHelper = MySQLiteOpenHelper.getInstance(EditTask.this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
 

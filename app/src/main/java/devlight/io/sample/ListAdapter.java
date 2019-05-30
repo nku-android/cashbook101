@@ -2,7 +2,9 @@ package devlight.io.sample;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +22,7 @@ import java.util.List;
 import de.halfbit.pinnedsection.PinnedSectionListView;
 
 
-
-public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements View.OnClickListener , PinnedSectionListView.PinnedSectionListAdapter {
+public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements View.OnClickListener, PinnedSectionListView.PinnedSectionListAdapter {
 
     private int resourceId;
     private ListView listView;
@@ -29,15 +30,15 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
     private boolean isScrollDown;
     private int mFirstTop, mFirstPosition;
     private InnerItemOnclickListener mListener;
-    private List<itemHolder> mitemList;
+    private List<itemHolder> mItemList;
 
     @SuppressLint("ResourceType")
-    public ListAdapter(Context context, int textViewResourceId, List<itemHolder> objects, ListView mlistView){
+    public ListAdapter(Context context, int textViewResourceId, List<itemHolder> objects, ListView mlistView) {
         super(context, textViewResourceId, objects);
         resourceId = textViewResourceId;
         listView = mlistView;
-        animation = AnimationUtils.loadAnimation(context,R.animator.item_list_in_anim);
-        mitemList = objects;
+        animation = AnimationUtils.loadAnimation(context, R.animator.item_list_in_anim);
+        mItemList = objects;
 
         AbsListView.OnScrollListener mOnScrollListener = new AbsListView.OnScrollListener() {
             @Override
@@ -61,26 +62,40 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
         };
 
         listView.setOnScrollListener(mOnScrollListener);
+
+        this.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                for (int i = 0; i < mlistView.getChildCount(); ++i) {
+                    View v = mlistView.getChildAt(i);
+                    v.setAlpha(1f);
+                    v.setTranslationY(0);
+                    v.setTranslationX(0);
+                }
+            }
+        });
     }
 
     /*  由系统调用，获取一个View对象，作为ListView的条目，屏幕上能显示多少个条目，getView方法就会被调用多少次
      *  position：代表该条目在整个ListView中所处的位置，从0开始
      */
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
         itemHolder data = getItem(position);
         final ViewHolder viewHolder;
         if (convertView == null) {
             //若没有缓存布局，则加载
             //首先获取布局填充器，然后使用布局填充器填充布局文件
-            convertView=LayoutInflater.from(getContext()).inflate(resourceId,null);
+            convertView = LayoutInflater.from(getContext()).inflate(resourceId, null);
 
             //存储子项布局中子控件对象
             viewHolder = new ViewHolder();
             viewHolder.text = (TextView) convertView.findViewById(R.id.list_item_text);
             viewHolder.time = (TextView) convertView.findViewById(R.id.list_item_time);
             viewHolder.btn = (ImageButton) convertView.findViewById(R.id.list_item_btn);
+            viewHolder.delete = (ImageButton) convertView.findViewById(R.id.delete_btn);
 
 
             // 将内部类对象存储到View对象中
@@ -92,7 +107,7 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
         }
 
         //清除当前显示区域中所有item的动画
-        for (int i=0;i<listView.getChildCount();i++){
+        for (int i = 0; i < listView.getChildCount(); i++) {
             View view = listView.getChildAt(i);
             view.clearAnimation();
         }
@@ -104,9 +119,12 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
 
 
         viewHolder.text.setText(data.text);
+        viewHolder.time.setTag(position);
+        viewHolder.time.setOnClickListener(this);
 
         if (data.type == 0) {
             viewHolder.btn = null;
+            viewHolder.delete = null;
             convertView.setBackgroundColor(Color.parseColor("#ddeef8"));
             viewHolder.text.setBackgroundColor(Color.parseColor("#ddeef8"));
             viewHolder.time.setBackgroundColor(Color.parseColor("#ddeef8"));
@@ -116,27 +134,36 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
             viewHolder.btn.setImageResource(R.drawable.select_button_on);
             viewHolder.btn.setTag(position);
             viewHolder.btn.setOnClickListener(this);
+            viewHolder.delete.setImageResource(R.drawable.ic_delete);
+            viewHolder.delete.setTag(position);
+            viewHolder.delete.setOnClickListener(this);
             viewHolder.time.setText(data.time);
+            viewHolder.time.setTag(position);
+            viewHolder.time.setOnClickListener(this);
+
         }
         if (data.type == 2) {
             viewHolder.btn.setImageResource(R.drawable.select_button_off);
             viewHolder.btn.setTag(position);
             viewHolder.btn.setOnClickListener(this);
+            viewHolder.delete.setImageResource(R.drawable.ic_delete);
+            viewHolder.delete.setTag(position);
+            viewHolder.delete.setOnClickListener(this);
             viewHolder.time.setText(data.time);
+            viewHolder.time.setTag(position);
+            viewHolder.time.setOnClickListener(this);
         }
-
-
 
 
         return convertView;
     }
 
-    interface InnerItemOnclickListener {
+    public interface InnerItemOnclickListener {
         void itemClick(View v);
     }
 
-    public void setOnInnerItemOnClickListener(InnerItemOnclickListener listener){
-        this.mListener=listener;
+    public void setOnInnerItemOnClickListener(InnerItemOnclickListener listener) {
+        this.mListener = listener;
     }
 
     @Override
@@ -147,15 +174,16 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
 
     public final static class ViewHolder {
         ImageButton btn;
+        ImageButton delete;
         TextView text;
         TextView time;
     }
 
-    public final static class itemHolder{
-        int btn;
-        String text;
-        String time;
-        int type;
+    public final static class itemHolder {
+        public String text;
+        public String time;
+        public int type;
+        public int id;
     }
 
     // We implement this method to return 'true' for all view types we want to pin
@@ -166,17 +194,22 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
 
     @Override
     public int getItemViewType(int position) {
-        if (mitemList.get(position).type == 0)
+        if (mItemList.get(position).type == 0)
             return 1;
         else
             return 0;
     }
+
     @Override
     public boolean isItemViewTypePinned(int viewType) {
         if (viewType == 1)
-                return true;
+            return true;
         else
             return false;
+    }
+
+    public void setItemList(List<itemHolder> mItemList) {
+        this.mItemList = mItemList;
     }
 
 
