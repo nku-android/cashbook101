@@ -1,6 +1,7 @@
-package devlight.io.sample;
+package devlight.io.sample.components;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Color;
@@ -17,9 +18,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import de.halfbit.pinnedsection.PinnedSectionListView;
+import devlight.io.sample.R;
 
 
 public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements View.OnClickListener, PinnedSectionListView.PinnedSectionListAdapter {
@@ -184,6 +188,15 @@ public class ListAdapter extends ArrayAdapter<ListAdapter.itemHolder> implements
         public String time;
         public int type;
         public int id;
+
+        public static itemHolder fromContentValues(ContentValues cv) {
+            itemHolder holder = new itemHolder();
+            holder.id = cv.getAsInteger(TodoItem.ID);
+            holder.text = cv.getAsString(TodoItem.TITLE);
+            holder.time = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(cv.getAsLong(TodoItem.ALERT_TIME));
+            holder.type = cv.getAsInteger(TodoItem.IS_DONE) + 1;
+            return holder;
+        }
     }
 
     // We implement this method to return 'true' for all view types we want to pin

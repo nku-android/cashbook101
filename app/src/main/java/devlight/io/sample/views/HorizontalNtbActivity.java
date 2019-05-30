@@ -1,4 +1,4 @@
-package devlight.io.sample;
+package devlight.io.sample.views;
 
 
 import android.graphics.Color;
@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -18,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import devlight.io.library.ntb.NavigationTabBar;
+import devlight.io.sample.components.MessageEvent;
+import devlight.io.sample.R;
 
 
 public class HorizontalNtbActivity extends FragmentActivity {
@@ -26,15 +27,14 @@ public class HorizontalNtbActivity extends FragmentActivity {
     private final String TAG = getClass().getName();
 
 
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_horizontal_ntb);
 
-        ViewPager viewPager = (ViewPager)findViewById(R.id.vp_horizontal_ntb);
-        String waitPayFlag = getIntent().getStringExtra("id") ;
-        if(!TextUtils.isEmpty(waitPayFlag)){
+        ViewPager viewPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
+        String waitPayFlag = getIntent().getStringExtra("id");
+        if (!TextUtils.isEmpty(waitPayFlag)) {
             if ("1".equals(waitPayFlag)) {
                 // 这里设置要跳转到第几个fragment
                 viewPager.setCurrentItem(1);
@@ -108,22 +108,19 @@ public class HorizontalNtbActivity extends FragmentActivity {
         navigationTabBar.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
-                Log.i(TAG, String.format("onPageScrolled %d, %f, %d", position, positionOffset, positionOffsetPixels));
             }
 
             @Override
             public void onPageSelected(final int position) {
                 navigationTabBar.getModels().get(position).hideBadge();
-                if (position == 1) {
-                    EventBus.getDefault().post(MessageEvent.UpdateTodo());
-                }
+                EventBus.getDefault().post(MessageEvent.UpdateTodo());
+
 
             }
 
             @Override
             public void onPageScrollStateChanged(final int state) {
 
-                Log.i(TAG, String.format("onPageScrollStateChanged: state: %d", state));
             }
         });
 

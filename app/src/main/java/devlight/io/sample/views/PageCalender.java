@@ -1,10 +1,9 @@
-package devlight.io.sample;
+package devlight.io.sample.views;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,8 +24,12 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import devlight.io.sample.components.CustomDayPickerView;
+import devlight.io.sample.R;
+import devlight.io.sample.components.ListAdapter;
+import devlight.io.sample.components.MessageEvent;
 import devlight.io.sample.components.MySQLiteOpenHelper;
+import devlight.io.sample.utils.Animations;
+import devlight.io.sample.utils.MyDateUtils;
 import me.nlmartian.silkcal.DatePickerController;
 import me.nlmartian.silkcal.SimpleMonthAdapter;
 
@@ -35,6 +38,11 @@ public class PageCalender extends Fragment {
     private MySQLiteOpenHelper dbHelper = MySQLiteOpenHelper.getInstance(getContext());
     private ListAdapter mListAdapter;
     private long current_timestamp;
+
+//
+//    void test(View view) {
+//        AlarmUtils.setAlarm(getContext(), "TIMER_ACTION", 1, System.currentTimeMillis() + 5000, AlarmManager.RTC_WAKEUP);
+//    }
 
     @BindView(R.id.one_day_todo)
     ListView one_day_todo;
@@ -71,9 +79,7 @@ public class PageCalender extends Fragment {
 
             @Override
             public void onDayOfMonthSelected(int year, int month, int day) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(year, month, day, 0, 0, 0);
-                current_timestamp = calendar.getTimeInMillis();
+                current_timestamp = MyDateUtils.getDayTimestamp(year, month, day);
                 update_todo();
             }
 
@@ -156,7 +162,7 @@ public class PageCalender extends Fragment {
     }
 
     private ArrayList<ListAdapter.itemHolder> getOneDayTodo(long today_start) {
-        long today_end = today_start + 86400000;
+        long today_end = today_start + MyDateUtils.MillisInDay-1;
 
         String sql = "SELECT * FROM tb_todo where (alert_time >= ? AND alert_time < ?)";
 

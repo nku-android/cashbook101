@@ -1,4 +1,4 @@
-package devlight.io.sample;
+package devlight.io.sample.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -16,8 +16,10 @@ import android.view.View;
 
 import java.text.DecimalFormat;
 
+import devlight.io.sample.R;
 
-public class waveview extends View {
+
+public class WaveView extends View {
     private int radius = dp2px(55);
     private int textColor;
     private int textSize;
@@ -36,15 +38,15 @@ public class waveview extends View {
     private DecimalFormat df = new DecimalFormat("0.0");
 
 
-    public waveview(Context context) {
+    public WaveView(Context context) {
         this(context, null);
     }
 
-    public  waveview(Context context, AttributeSet attrs) {
+    public WaveView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public  waveview(Context context, AttributeSet attrs, int defStyleAttr) {
+    public WaveView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.WaveProgressView, defStyleAttr, R.style.WaveProgressViewDefault);
         radius = (int) a.getDimension(R.styleable.WaveProgressView_radius, radius);
