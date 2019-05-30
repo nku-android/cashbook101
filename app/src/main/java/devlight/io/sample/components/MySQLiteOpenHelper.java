@@ -39,7 +39,6 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE tb_todo (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "title Text not null," +
-                "alert_time INTEGER," +
                 "content Text,"+
                 "clock Long,"+
                 "importance String default '无', "+
@@ -53,7 +52,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         cv1.put("importance","无");
         cv1.put("clock","不需要提醒");
         cv1.put("content"," ");
-        cv1.put("alert_time", System.currentTimeMillis() + 3600);
+        cv1.put("alert_time", 20190530);
         db.insert("tb_todo", null, cv1);
 
         ContentValues cv2 = new ContentValues();
@@ -62,8 +61,8 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         cv2.put("importance","无");
         cv2.put("clock","不需要提醒");
         cv2.put("content"," ");
-        cv2.put("alert_time", System.currentTimeMillis());
-        db.insert("tb_todo", null, cv);
+        cv2.put("alert_time", 20170920);
+        db.insert("tb_todo", null, cv2);
     }
 
     @Override

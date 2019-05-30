@@ -38,10 +38,13 @@ import com.bigkoo.pickerview.listener.OnOptionsSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import devlight.io.sample.components.MySQLiteOpenHelper;
@@ -170,7 +173,8 @@ public class EditTask extends Activity {
 
         item.setText(cv.getAsString("title"));
         content.setText(cv.getAsString("content"));
-        time_data.setText("时间:"+cv.getAsString("alert_time"));
+        String time = cv.getAsString("alert_time");;
+        time_data.setText("时间:"+time.substring(0,4)+"-"+time.substring(4,6)+"-"+time.substring(6));
 
 //        clocktext.setText("提醒时间:"+cv.getAsString("clock"));
 
@@ -318,8 +322,8 @@ public class EditTask extends Activity {
         String tmp = clocktext.getText().toString();
         cv.put("clock",tmp.substring(tmp.indexOf(':')+1));
         cv.put("importance",str);
-        tmp = time_data.getText().toString();
-        cv.put("alert_time",tmp.substring(tmp.indexOf(':')+1));
+        int tmp1 = mYear*10000+(mMonth+1)*100+mDay;
+        cv.put("alert_time",tmp1);
 
         db.update("tb_todo",cv,"id=?",new String[]{id+""});
 

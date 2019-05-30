@@ -267,8 +267,8 @@ public class addtask extends Activity {
         cv.put("content",content.getText().toString());
         cv.put("clock",clocktext.getText().toString());
         cv.put("importance",str);
-        String tmp = time_data.getText().toString();
-        cv.put("alert_time",tmp.substring(tmp.indexOf(':')+1));
+        int tmp = mYear*10000+(mMonth+1)*100+mDay;
+        cv.put("alert_time",tmp);
 
         db.insert("tb_todo",null,cv);
 
