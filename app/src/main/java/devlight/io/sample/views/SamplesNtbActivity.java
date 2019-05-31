@@ -1,4 +1,4 @@
-package devlight.io.sample;
+package devlight.io.sample.views;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -7,6 +7,7 @@ import android.support.v4.graphics.ColorUtils;
 import android.widget.Toast;
 
 import devlight.io.library.ntb.NavigationTabBar;
+import devlight.io.sample.R;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -14,6 +15,7 @@ import java.util.Locale;
 /**
  * Created by GIGAMOLE on 28.03.2016.
  */
+@Deprecated
 public class SamplesNtbActivity extends Activity {
 
     @Override

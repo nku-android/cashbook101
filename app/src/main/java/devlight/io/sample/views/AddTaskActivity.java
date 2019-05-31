@@ -1,4 +1,4 @@
-package devlight.io.sample;
+package devlight.io.sample.views;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -7,15 +7,9 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.net.MacAddress;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,13 +17,10 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 //import com.bigkoo.pickerview.OptionsPickerView;
@@ -40,16 +31,12 @@ import com.bigkoo.pickerview.view.OptionsPickerView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import devlight.io.sample.R;
 import devlight.io.sample.components.MySQLiteOpenHelper;
 
-import static android.content.ContentValues.TAG;
-import static java.security.AccessController.getContext;
-
-public class addtask extends Activity {
+public class AddTaskActivity extends Activity {
     private Spinner spinner;
     private List<String> data_list;
     private ArrayAdapter<String> arr_adapter;
@@ -77,7 +64,6 @@ public class addtask extends Activity {
 
     String str;
 
-   // private OptionsPickerView pvOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +93,7 @@ public class addtask extends Activity {
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
                 // TODO Auto-generated method stub
-                str = (String) spinner.getItemAtPosition(arg2);
+                str = (String) spinner.getSelectedItem();
             }
 
             @Override
@@ -156,7 +142,7 @@ public class addtask extends Activity {
 
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alterDialog = new AlertDialog.Builder(addtask.this);
+                AlertDialog.Builder alterDialog = new AlertDialog.Builder(AddTaskActivity.this);
                 alterDialog.setTitle("保存");
                 alterDialog.setMessage("是否设置该任务");
                 alterDialog.setCancelable(false);
@@ -164,8 +150,8 @@ public class addtask extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         displayDatabaseInfo();
-                        Toast.makeText(addtask.this, "设置成功", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(addtask.this, HorizontalNtbActivity.class);
+                        Toast.makeText(AddTaskActivity.this, "设置成功", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(AddTaskActivity.this, HorizontalNtbActivity.class);
                         intent.putExtra("id",1);
                         startActivity(intent);
                     }
@@ -173,7 +159,7 @@ public class addtask extends Activity {
                 alterDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(addtask.this, "取消", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddTaskActivity.this, "取消", Toast.LENGTH_SHORT).show();
                     }
                 });
                 alterDialog.show();
@@ -246,7 +232,7 @@ public class addtask extends Activity {
                     @Override
                     public void onOptionsSelectChanged(int options1, int options2, int options3) {
                         String str = "options1: " + options1 + "\noptions2: " + options2 + "\noptions3: " + options3;
-                //        Toast.makeText(addtask.this, str, Toast.LENGTH_SHORT).show();
+                //        Toast.makeText(AddTaskActivity.this, str, Toast.LENGTH_SHORT).show();
                     }
                 })
                 // .setSelectOptions(0, 1, 1)
@@ -260,7 +246,7 @@ public class addtask extends Activity {
     private void displayDatabaseInfo() {
 
 
-        dbHelper = MySQLiteOpenHelper.getInstance(addtask.this);
+        dbHelper = MySQLiteOpenHelper.getInstance(AddTaskActivity.this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -268,8 +254,8 @@ public class addtask extends Activity {
         cv.put("content",content.getText().toString());
         cv.put("clock",clocktext.getText().toString());
         cv.put("importance",str);
-        String tmp = time_data.getText().toString();
-        cv.put("alert_time",tmp.substring(tmp.indexOf(':')+1));
+        int tmp = mYear*10000+(mMonth+1)*100+mDay;
+        cv.put("alert_time",tmp);
 
         db.insert("tb_todo",null,cv);
 

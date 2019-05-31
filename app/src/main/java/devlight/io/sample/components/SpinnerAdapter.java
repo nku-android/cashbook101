@@ -1,4 +1,4 @@
-package devlight.io.sample;
+package devlight.io.sample.components;
 
 import android.content.Context;
 import android.view.View;
@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import java.util.List;
+
+import devlight.io.sample.R;
 
 
 public class SpinnerAdapter extends BaseAdapter {
