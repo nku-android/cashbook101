@@ -2,9 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="4">
+    android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text=" LemonTodo"
+        android:textColor="#FFFFFF"
+        android:paddingTop="10dp"
+        android:background="#1874CD"
+        android:textStyle="bold"
+        android:textSize="28sp"/>
 
     <devlight.io.sample.views.CustomDayPickerView xmlns:calendar="http://schemas.android.com/apk/res-auto"
         android:id="@+id/calendar_view"
@@ -13,8 +21,18 @@
         android:background="@android:color/white"
         calendar:drawRoundRect="false" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="------当日任务------"
+        android:gravity="center"
+        android:textSize="20sp" />
+
     <ListView
         android:id="@+id/one_day_todo"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="fill_parent" />
 

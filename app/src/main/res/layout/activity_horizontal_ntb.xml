@@ -4,8 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="#FFF5EE"
+    android:background="#1874CD"
     android:orientation="vertical">
 
     <android.support.v4.view.ViewPager
@@ -18,6 +17,7 @@
         android:id="@+id/ntb_horizontal"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_marginBottom="5dp"
         app:ntb_bg_color="#1874CD"
         app:ntb_badge_gravity="top"
         app:ntb_badge_position="right"

@@ -3,8 +3,10 @@ package devlight.io.sample.views;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -38,6 +40,7 @@ public class PageCalender extends Fragment {
     private MySQLiteOpenHelper dbHelper = MySQLiteOpenHelper.getInstance(getContext());
     private ListAdapter mListAdapter;
     private long current_timestamp;
+    private boolean flag = false;
 
 //
 //    void test(View view) {
@@ -102,57 +105,75 @@ public class PageCalender extends Fragment {
         mListAdapter = new ListAdapter(getContext(), R.layout.item_todolist, list, one_day_todo);
         mListAdapter.setOnInnerItemOnClickListener(v -> {
             int position = (int) v.getTag();
-            AnimatorSet animatorSet = Animations.DeleteAnimation(one_day_todo, position);
-            animatorSet.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
+            if (v.getId() == R.id.list_item_text || v.getId() == R.id.list_item_time) {
+                int id = list.get(position).id;
+                Intent intent = new Intent(getActivity(), EditTask.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
 
+            }else{
+                if (v.getId() == R.id.delete_btn) {
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    db.delete("tb_todo", "id= ?", new String[]{list.get(position).id + ""});
+                    list.remove(position);
+                    flag = true;
                 }
+                    AnimatorSet animatorSet = Animations.DeleteAnimation(one_day_todo, position);
+                    animatorSet.addListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
 
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    if (position < list.size()) {
-                        if (list.get(position).type == 1) {
-                            ContentValues values = new ContentValues();
-                            values.put("is_done", 1);
-                            dbHelper.getWritableDatabase().update("tb_todo", values, "id=?", new String[]{list.get(position).id + ""});
-                            list.get(position).type = 2;
-                        } else if (list.get(position).type == 2) {
-                            ContentValues values = new ContentValues();
-                            values.put("is_done", 0);
-                            dbHelper.getWritableDatabase().update("tb_todo", values, "id=?", new String[]{list.get(position).id + ""});
-                            list.get(position).type = 1;
                         }
 
-                    }
-                    mListAdapter.setItemList(list);
-                    one_day_todo.setAdapter(mListAdapter);
-                    for (int i = 0; i < one_day_todo.getChildCount(); ++i) {
-                        View child = one_day_todo.getChildAt(i);
-                        child.setAlpha(1f);
-                        child.setTranslationY(0);
-                        child.setTranslationX(0);
-                    }
-                }
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            if(flag == false) {
+                                if (position < list.size()) {
+                                    if (list.get(position).type == 1) {
+                                        ContentValues values = new ContentValues();
+                                        values.put("is_done", 1);
+                                        dbHelper.getWritableDatabase().update("tb_todo", values, "id=?", new String[]{list.get(position).id + ""});
+                                        list.get(position).type = 2;
+                                    } else if (list.get(position).type == 2) {
+                                        ContentValues values = new ContentValues();
+                                        values.put("is_done", 0);
+                                        dbHelper.getWritableDatabase().update("tb_todo", values, "id=?", new String[]{list.get(position).id + ""});
+                                        list.get(position).type = 1;
+                                    }
 
-                @Override
-                public void onAnimationCancel(Animator animation) {
+                                }
+                            }
 
-                }
+                            mListAdapter.setItemList(list);
+                            one_day_todo.setAdapter(mListAdapter);
+                            flag = false;
+                            for (int i = 0; i < one_day_todo.getChildCount(); ++i) {
+                                View child = one_day_todo.getChildAt(i);
+                                child.setAlpha(1f);
+                                child.setTranslationY(0);
+                                child.setTranslationX(0);
+                            }
+                        }
 
-                @Override
-                public void onAnimationRepeat(Animator animation) {
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
 
-                }
-            });
+                        }
 
-            animatorSet.start();
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
 
+                        }
+                    });
+
+                    animatorSet.start();
+            }
 
         });
 
         one_day_todo.setAdapter(mListAdapter);
     }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent messageEvent) {
