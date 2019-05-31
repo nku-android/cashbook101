@@ -58,8 +58,8 @@ public class PageCalender extends Fragment {
 
     @Override
     public void onStop() {
-        super.onStop();
         EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 
     @Override
@@ -162,7 +162,7 @@ public class PageCalender extends Fragment {
     }
 
     private ArrayList<ListAdapter.itemHolder> getOneDayTodo(long today_start) {
-        long today_end = today_start + MyDateUtils.MillisInDay-1;
+        long today_end = today_start + MyDateUtils.MillisInDay - 1;
 
         String sql = "SELECT * FROM tb_todo where (alert_time >= ? AND alert_time < ?)";
 

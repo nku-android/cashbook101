@@ -239,9 +239,9 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().register(this);
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -12,11 +12,12 @@ public final class AlarmUtils {
 
     public static void setAlarm(Context context, int id, long timeInMillions, int alarmType) {
         Intent intent = new Intent(context, AlarmReceiver.class);
-        intent.putExtra("alert_time", timeInMillions);
-        intent.setAction("TIMER_ACTION");
+
+        intent.putExtra("id", id);
+//        intent.putExtra("alert_time", timeInMillions);
+//        intent.setAction("TIMER_ACTION");
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
-
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
