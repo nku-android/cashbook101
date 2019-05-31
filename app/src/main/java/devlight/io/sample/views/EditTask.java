@@ -192,7 +192,7 @@ public class EditTask extends Activity {
             } else {
                 AlertDialog.Builder alterDialog = new AlertDialog.Builder(EditTask.this);
                 alterDialog.setTitle("保存");
-                alterDialog.setMessage("是否设置该任务");
+                alterDialog.setMessage("是否确认设置");
                 alterDialog.setCancelable(false);
                 alterDialog.setPositiveButton("确定", (dialog, which) -> {
                     displayDatabaseInfo();

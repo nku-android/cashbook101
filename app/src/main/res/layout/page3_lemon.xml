@@ -5,9 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:background="@drawable/background"
-    tools:context=".views.PageLemon">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/top"
@@ -18,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
-            android:layout_marginLeft="130dp"
+            android:layout_marginLeft="115dp"
             android:gravity="center"
             android:text="请设置学习时间"
             android:textColor="@color/design_default_color_primary_dark"
@@ -42,9 +40,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/top"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="425dp"
+        android:background="#93c6c7"
         android:gravity="center"
         android:text="开启你的柠檬树时间"
         android:textSize="23dp" />
+
+
 
 </RelativeLayout>
