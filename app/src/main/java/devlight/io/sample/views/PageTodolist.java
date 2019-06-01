@@ -78,7 +78,6 @@ public class PageTodolist extends Fragment implements ListAdapter.InnerItemOncli
             DatabaseUtils.cursorIntToContentValues(cursor, TodoItem.IS_DONE, cv_undo);
             DatabaseUtils.cursorStringToContentValues(cursor, TodoItem.TITLE, cv_undo);
             DatabaseUtils.cursorLongToContentValues(cursor, TodoItem.ALERT_TIME, cv_undo);
-
             item_undo = ListAdapter.itemHolder.fromContentValues(cv_undo);
             list.add(item_undo);
             insertPosition++;

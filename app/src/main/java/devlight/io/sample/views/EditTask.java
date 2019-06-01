@@ -192,7 +192,7 @@ public class EditTask extends Activity {
             } else {
                 AlertDialog.Builder alterDialog = new AlertDialog.Builder(EditTask.this);
                 alterDialog.setTitle("保存");
-                alterDialog.setMessage("是否设置该任务");
+                alterDialog.setMessage("是否保存修改");
                 alterDialog.setCancelable(false);
                 alterDialog.setPositiveButton("确定", (dialog, which) -> {
                     displayDatabaseInfo();
@@ -217,13 +217,6 @@ public class EditTask extends Activity {
         return null;
     }
 
-    /**
-     * 设置日期 利用StringBuffer追加
-     */
-//    public void display() {
-//        String time = mYear + "-" + (mMonth + 1) + "-" + mDay;
-//        time_data.setText("时间:" + time);
-//    }
 
     private DatePickerDialog.OnDateSetListener mDateListener = new DatePickerDialog.OnDateSetListener() {
         @Override

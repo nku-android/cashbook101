@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".views.MainActivity">
+        <activity android:name=".views.HorizontalNtbActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,9 +19,9 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".views.HorizontalNtbActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <!--<activity-->
+            <!--android:name=".views.HorizontalNtbActivity"-->
+            <!--android:configChanges="orientation|keyboardHidden|screenSize" />-->
 
         <activity android:name=".views.AddTaskActivity" />
         <activity android:name=".views.EditTask"/>
