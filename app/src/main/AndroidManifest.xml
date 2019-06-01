@@ -6,7 +6,8 @@
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/lemon"
+        tools:replace="android:icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
@@ -19,9 +20,6 @@
             </intent-filter>
         </activity>
 
-        <!--<activity-->
-            <!--android:name=".views.HorizontalNtbActivity"-->
-            <!--android:configChanges="orientation|keyboardHidden|screenSize" />-->
 
         <activity android:name=".views.AddTaskActivity" />
         <activity android:name=".views.EditTask"/>

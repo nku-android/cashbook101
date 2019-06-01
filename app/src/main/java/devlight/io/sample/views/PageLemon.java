@@ -21,7 +21,7 @@ import devlight.io.sample.R;
 public class PageLemon extends Fragment {
     private CountDownTimer mTimer;
     int t;
-    final String[] items = new String[]{"1分钟","30分钟", "60分钟", "90分钟", "120分钟",};
+    final String[] items = new String[]{"10分钟","30分钟", "60分钟", "90分钟", "120分钟"};
     private WaveView waveProgressView_0, waveProgressView_1, waveProgressView_2;
     private Button start;
     private TextView time;
@@ -31,7 +31,7 @@ public class PageLemon extends Fragment {
         Resources resources = getContext().getResources();
         Drawable btnDrawable = resources.getDrawable(R.drawable.background);
         view.setBackground(btnDrawable);
-       // view.setBackgroundDrawable(btnDrawable);
+
 
         waveProgressView_0 = (WaveView) view.findViewById(R.id.wpv_0);
         time=(TextView)view.findViewById(R.id.time);
